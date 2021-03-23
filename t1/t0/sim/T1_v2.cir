@@ -1,0 +1,34 @@
+Análise do circuito do T1 (v2)
+
+* Descrição do circuito *
+
+Va 1 4 5.14793149166
+R1 1 2 1.00482572563k
+R2 3 2 2.03286190649k
+R3 2 0 3.11785434967k
+R4 4 0 4.11016834747k
+R5 5 0 3.13628987141k
+R6 4 f6 2.09741692172k
+R7 6 7 1.03142587047k
+Id 7 5 1.04178245279m
+Gb 5 3 2 0 7.1972032444m ; Kb com unidades de condutância (mS)
+Vfict f6 6 0V ; Fonte de Tensão Fictícia (0V)
+Hc 0 7 Vfict  8.17807176177k ; Kc com unidades de resistência (kOhm)
+
+* Comandos NGSpice *
+
+.options savecurrents
+.control
+op
+echo  "op_TAB"
+print all
+echo  "op_END"
+
+echo "********************************************"
+
+quit
+
+.endc
+
+.end
+

@@ -1,0 +1,323 @@
+\newpage
+\section{Theoretical Analysis}
+\label{sec:analysis}
+
+In this section, the circuit shown in Figure~\ref{fig:circuit} is analyzed
+theoretically using the Mesh and Nodal methods. 
+
+\subsection{Circuit Analysis using Mesh Method}
+\label{sec:mesh}
+In this section we will proceed to the analysis of the given circuit through the Mesh Method.
+Briefly explaining, this method uses both Kirchhoff’s Voltage Law (KVL) and Ohm’s Law to define a set of equations guaranteed to be solvable if the circuit has a solution, therefore determining unknown currents (and indirectly the voltages) at any place within a circuit.
+Mesh analysis works by arbitrarily assigning currents to each mesh in the circuit. A mesh is a loop that does not contain any other loops.
+To do so, we have chosen to go through each mesh in the clockwise direction, and considered, for the currents' directions, the ones depicted in the supplied figure (we add that the direction of $I_a$ is from node 1 to node 2). This choice is, however, entirely arbitrary. It is also important to note that we can only apply KVL to meshes that don't contain current sources, which is the case of meshes A and C. We proceeded, then, to the analysis of these meshes.
+\par
+\medskip
+
+\textbf{KVL equations:}
+
+Mesh A
+
+\begin{equation}
+	-V_a + R_1I_a + R_3I_3 - R_4I_4 = 0
+	\label{eq:kvl}
+\end{equation}
+
+
+Mesh C
+\begin{equation}
+	R_4I_4 + V_c - R_7I_c - R_6I_c = 0\Leftrightarrow
+	\label{eq:kvl1}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow R_4I_4 + K_cI_c - R_7I_c - R_6I_6 = 0
+	\label{eq:kvl1}
+\end{equation}
+
+Now, using Kirchhoff's Current Law, we deduced the equations of the following nodes, attempting to simplify the meshes' equations and solve them in order to the mesh currents:
+\par
+\medskip
+
+Node 2
+\begin{equation}
+	I_a + I_b = I_3
+	\label{eq:nod1}
+\end{equation}
+
+Node 5
+\begin{equation}
+	I_d = I_5 + I_b 
+	\label{eq:nod2}
+\end{equation}
+
+Node 4
+\begin{equation}
+	I_a + I_c + I_4 = 0 \Leftrightarrow 
+	\label{eq:nod3}
+\end{equation}
+
+\begin{equation}
+    \Leftrightarrow I_4 = -(I_a + I_c)
+	\label{eq:nod3}
+\end{equation}
+
+We can now use the previous relations to compute $I_3$ and $I_4$ in order to $I_a$, $I_b$ and $I_c$. Going back to the meshes' study, we obtained: 
+\par
+Mesh A
+
+\begin{equation}
+	R_1I_a + R_3(I_a + I_b) - R_4I_4 = V_a\Leftrightarrow
+	\label{eq:vo_sol}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow (R_1 + R_3 + R_4)I_a + R_3I_b + R_4I_c = V_a
+	\label{eq:vo_sol}
+\end{equation}
+Mesh C
+
+\begin{equation}
+	-R_4(I_a + I_c) + (K_c - R_7 - R_6)I_c = 0\Leftrightarrow 
+	\label{eq:vo_sol1}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow -R_4I_a + (K_c - R_4 - R_6 - R_7)I_c = 0
+	\label{eq:vo_sol1}
+\end{equation}
+
+Since $I_d$ is given, we only need 3 equations. The last one is deduced from the condition defining the dependent current source:
+
+\begin{equation}
+	I_b = K_bV_b = K_bR_3I_3 = K_bR_3(I_a + I_b)\Leftrightarrow
+	\label{eq:vo_nat}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow K_bR_3I_a + (K_bR_3 - 1)I_b = 0
+	\label{eq:vo_nat}
+\end{equation}
+
+\medskip
+Finally, we  rewrote the referenced three equations in matricial form:
+\medskip
+
+\begin{equation}
+	\begin{bmatrix}
+		R_1 + R_3 + R_4 & R_3 & R_4 \\
+		-R_4 & 0 & K_c - R_4 - R_6 - R_7 \\
+		K_bR_3 & K_bR_3 - 1 & 0
+	\end{bmatrix}
+	\begin{bmatrix}
+		I_a \\
+		I_b \\
+		I_c
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		V_a \\
+		0 \\
+		0
+	\end{bmatrix}
+\end{equation}
+
+\vspace{1cm}
+
+The solutions we obtained by solving the matricial equation shown above, with the help of Octave software, as recomended, are presented in the following table (~\ref{tab:mesh}).
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|r|}
+		\hline    
+		{\bf Name} & {\bf Value [A or V]} \\ \hline
+		\input{Mesh_tab}
+	\end{tabular}
+	\caption{Solutions given by the Mesh Method. {\em I} stands for currents, which
+		are expressed in Ampere; {\it V} represents voltages, which are expressed in
+		Volt.}
+	\label{tab:mesh}
+\end{table}
+
+
+
+
+\subsection{Circuit Analysis using Nodal Method}
+\label{sec:nodal}
+In this subsection, we are going to analyze the given circuit using the Nodal Method, as explained in the course lectures. The aim is the same: if the circuit is solvable, we shall, then, find several equations that would allow to determine the behavior of every component in the circuit, namely the voltage and the current on each one.
+The method consists, then, in applying the Kirchhoff Current Law (KCL) to the nodes that are not connected to voltage sources, using additional equations for nodes related by voltage sources. 
+As a result, we obtain the voltage values on each node, which will permit to calculate the currents on each branch, by applying Ohm's Law. In this analysis, we kept the same choice for the directions of the currents flowing through the circuit.  
+\vspace{0.5cm}
+
+With this in mind, we obtained the following equations:
+
+\vspace{0.5cm}
+
+\textbf{KCL equations:}
+
+\vspace{0.3cm}
+
+Node 2:
+
+\begin{equation}
+	I_a + I_b = I_3 \Leftrightarrow
+	\label{eq:kcl2a}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow G_1V_1 + (-G_1-G_2-G_3)V_2 + G_2V_3 = 0 
+	\label{eq:kcl2b}
+\end{equation}
+
+\vspace{0.3cm}
+
+Node 3:
+
+\begin{equation}
+	I_b = I_2 \Leftrightarrow
+	\label{eq:kcl3a}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow (K_b + G_2)V_2 - G_2V_3 = 0 
+	\label{eq:kcl3b}
+\end{equation}
+
+\vspace{0.3cm}
+
+Node 5:
+
+\begin{equation}
+	I_d = I_5 + I_b \Leftrightarrow
+	\label{eq:kcl5a}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow K_bV_2 + G_5V_5 = I_d 
+	\label{eq:kcl5b}
+\end{equation}
+
+\vspace{0.3cm}
+
+Node 6
+
+\begin{equation}
+	I_c = I_7 \Leftrightarrow
+	\label{eq:kcl6a}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow G_6V_4 + (-G_6 - G_7)V_6 + G_7V_7 = 0
+	\label{eq:kcl6b}
+\end{equation}
+
+\vspace{1cm}
+
+\textbf{Additional equations:}
+\vspace{0.5cm}
+
+There are seven nodes and, therefore, there must be seven equations (we note that none of the nodal voltages is given). In order to acquire two more equations, we applied the Kirchhoff Voltage Law (KVL) to the meshes A and C, as followed:
+
+\vspace{0.3cm}
+
+Mesh A:
+
+\begin{equation}
+	-V_a + (V_1 - V_2) + (V_2 - 0) - (V_4 - 0) = 0 \Leftrightarrow
+	\label{eq:kvlAa}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow V_1 - V_4 = V_a 
+	\label{eq:kvlAb}
+\end{equation}
+
+\vspace{0.3cm}
+
+Mesh C:
+
+\begin{equation}
+	(V_4 - 0) + V_c - (V_6 - V_7) - (V_4 - V_6) = 0 \Leftrightarrow
+	\label{eq:kvlCa}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow K_cG_6V_4 - K_cG_6V_6 + V_7 = 0 
+	\label{eq:kvlCb}
+\end{equation}
+
+\vspace{0.3cm}
+
+For the final equation, we made use of a supernode, which consists on the fusion of multiple nodes. We have chosen the supernode connecting the nodes 2, 0 and 7, to which we applied the Kirchhoff Current Law, as shown in the following equation:
+
+\vspace{0.3cm}
+
+Supernode 2-0-7:
+
+\begin{equation}
+	I_a + I_b + I_4 + I_5 + I_c = I_d \Leftrightarrow
+	\label{eq:kcl207a}
+\end{equation}
+
+\begin{equation}
+	\Leftrightarrow G_1V_1 + (-G_1 - G_2)V_2 + G_2V_3 + (G_4 + G_6)V_4 + G_5V_5 - G_6V_6 = I_d 
+	\label{eq:kcl207b}
+\end{equation}
+
+\vspace{1cm}
+
+The previous equations led to the following matricial equation:
+
+\begin{equation}
+	\begin{bmatrix}
+		G_1 & -G_1 - G_2 - G_3 & G_2 & 0 & 0 & 0 & 0 \\
+		0 & K_b + G_2 & -G_2 & 0 & 0 & 0 & 0 \\
+		0 & K_b & 0 & 0 & G_5 & 0 & 0 \\
+		0 & 0 & 0 & G_6 & 0 & -G_6 - G_7 & G_7 \\
+		1 & 0 & 0 & -1 & 0 & 0 & 0 \\
+		0 & 0 & 0 & K_cG_6 & 0 & -K_cG_6 & 1 \\
+		G_1 & -G_1-G_2 & G_2 & G_4 + G_6 & G_5 & -G_6 & 0 
+	\end{bmatrix}
+	\begin{bmatrix}
+		V_1 \\
+		V_2 \\
+		V_3 \\
+		V_4 \\
+		V_5 \\
+		V_6 \\
+		V_7 
+	\end{bmatrix}
+	=  
+	\begin{bmatrix}
+		0 \\
+		0 \\
+		I_d \\
+		0 \\
+		V_a \\
+		0 \\
+		I_d
+	\end{bmatrix}
+\end{equation}
+
+\vspace{1cm}
+\vspace{1cm}
+
+
+By solving this matricial equation, using Octave software, as recommended, we obtained the results presented in the next table:
+
+\vspace{0.3cm}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|r|}
+		\hline    
+		{\bf Name} & {\bf Value [A or V]} \\ \hline
+		\input{Node_tab}
+	\end{tabular}
+	\caption{Solutions given by the Nodal Method. {\em I} stands for currents, which
+		are expressed in Ampere; {\it V} represents voltages, which are expressed in
+		Volt.}
+	\label{tab:nodal}
+\end{table}
+
+\pagebreak

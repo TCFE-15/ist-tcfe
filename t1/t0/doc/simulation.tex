@@ -1,0 +1,55 @@
+\section{Simulation Analysis}
+\label{sec:simulation}
+For the simulation process, we defined each component of the circuit in NGSpice, with the proper synthax, having inserted all the given values (that we extracted from the supplied Python script). We used the same node numbers as the ones in Figure~\ref{fig:circuit}. The results we obtained are shown in Table~\ref{tab:op}.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|l|r|}
+    \hline    
+    {\bf Name} & {\bf Value [A or V]} \\ \hline
+    \input{op_tab}
+  \end{tabular}
+  \caption{Operating point. A variable preceded by @ is of type {\em current}
+		and expressed in Ampere; other variables are of type {\it voltage} and expressed in
+		Volt.}
+  \label{tab:op}
+\end{table}
+
+First of all, we should point out what each name in the table represents:
+\vspace{0.2cm}
+
+By Ngspice default:
+
+$\bullet$ \textit{@rn[i]} is the current flowing through $R_n$
+
+$\bullet$ \textit{v(n)} is the voltage $V_n$(voltage in node $n$)
+
+$\bullet$ \textit{@id[current]} is the current $I_d$
+\vspace{.2cm}
+
+By the analysis of the circuit in Figure~\ref{fig:circuit}, the unknown variables are the following:
+
+$\bullet$ $V_b$ is \textit{v(2)}
+
+$\bullet$ $V_c$ is \textit{-v(7)}
+
+$\bullet$ $I_b$ is \textit{@gb[i]} 
+
+$\bullet$ $I_c$ is \textit{@r6[i]} or \textit{@r7[i]}
+\vspace{.2cm}
+
+\textbf{\textit{Note:}} \textit{f6} represents a fictitious node between $R_6$ and $R_7$, created in Ngspice in order to properly define the current dependent voltage source $V_c$ (as required by NGSpice synthax). It is supposed to be in the same node as \textit{v(6)}; therefore, they have the same voltage value.
+\vspace{.5cm}
+
+If we compare the values of $V_b$, $V_c$, $I_b$ and $I_c$ in Tables ~\ref{tab:mesh} and ~\ref{tab:nodal} with their respective representative value in Table~\ref{tab:op}, we notice that the results are the same. 
+
+Also, the values of voltage in each node obtained in Table~\ref{tab:nodal} are equal to the simulated ones.
+
+Finally, in addition to the relations stated above, by analyzing the circuit we see that $I_A$ is \textit{@r1[i]}, as intended. Comparing both Table~\ref{tab:mesh} and Table~\ref{tab:op}, we also realize that the results are equivalent.
+
+
+
+
+
+
+
