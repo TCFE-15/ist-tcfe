@@ -1,0 +1,42 @@
+* Title: Lab 2 Circuit (total solution)
+
+*saving the currents
+.options savecurrents
+
+*Netlist
+.include netlist4.mod
+
+.op
+.ic v(6)=8.761853 v(8)=0 v(fic)=0
+.end
+
+* Control commands
+.control
+*makes plots in color
+set hcopypscolor=1
+set color0=white
+set color1=black
+set color2=red
+set color3=blue
+set color4=violet
+set color5=rgb:3/8/0
+set color6=rgb:4/0/0
+
+op
+
+print all
+
+
+echo "********************************************"
+echo  "Transient analysis"
+echo "********************************************"
+tran 2e-3 20e-3 
+plot v(6) v(1)
+
+hardcopy ponto4ngspice.ps v(6) v(1)
+echo ponto4ngspice_FIG
+
+quit
+.endc
+
+.end

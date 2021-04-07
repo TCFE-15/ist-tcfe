@@ -1,0 +1,55 @@
+\newpage
+\section{Conclusion}
+\label{sec:conclusion}
+To start this conclusion we will present all the tabled results we already shown in sections \ref{sec:analysis} and \ref{sec:simulation} side by side to compare them.\footnote{By analysis of the circuit in figure \ref{fig:circuit} we know that $I_a$ is \textit{@r1[i]}, $I_b$ is \textit{@gib[i]}, $I_c$ is \textit{@ci[i]} and $I_d$ is \textit{@r6[i]}.}
+
+Starting of with the study for $t<0$, we show again the following results.
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\subfloat[Theoretical]{\begin{tabular}{|l|r|}
+			\hline    
+			{\bf Name} & {\bf Theoretical Value [A or V]} \\ \hline
+			\input{../mat/oct1_tab}	
+	\end{tabular}}	
+	\qquad
+	\subfloat[Simulated]{\begin{tabular}{|l|r|}
+			\hline    
+			{\bf Name} & {\bf NGSpice Value [A or V]} \\ \hline
+			\input{../sim/op1_tab}
+	\end{tabular}}	
+	\caption{Operating point analysis for $t<0$}
+	\label{tab:conc1}
+\end{table}
+\FloatBarrier
+
+With this side by side comparison, we are assured that the results obtained by the theoretical calculations and the simulation computation are exactly the same, as expected given that this is an operating point analysis for constant and linear components, except for the capacitor, that has no effect in the circuit at the time we are doing this analysis.  
+\vspace{0.5cm}
+
+For the second topic of the analysis of $v_s(t)$ these are the tables we obtained:
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\subfloat[Theoretical]{\begin{tabular}{|l|r|}
+			\hline    
+			{\bf Name} & {\bf Theoretical Value [A or V]} \\ \hline
+			\input{../mat/oct2_tab}	
+	\end{tabular}}	
+	\qquad
+	\subfloat[Simulated]{\begin{tabular}{|l|r|}
+			\hline    
+			{\bf Name} & {\bf NGSpice Value [A or V]} \\ \hline
+			\input{../sim/op2_tab}
+	\end{tabular}}
+	\caption{Operating point analysis for $v_s=0$}
+	\label{tab:conc2}
+\end{table}
+\FloatBarrier
+
+Once again the results we obtained were equal, as we assumed it should be, because with this being a linear component circuit under the conditions $V_s=0$ and the capacitor being replaced with a linear voltage source, the theoretical and simulated results should be equal if the nodal method was used correctly.
+
+Addressing the graphs we obtained, both the theoretical and simulated plots were alike for the same time intervals. The only exception we must point out is in figures \ref{fig:phase} and \ref{fig:sim5.3}b, where the phases of the phasors in function of frequency have the same shape but are delayed by $90$ degrees. This is because, as explained in section \ref{sec:analysis}, we defined the $v_s(t)$ function using cosine. To do this, we had to subtract $90$ degrees\footnote{$sin(\alpha)=cos(\alpha-90)$, $\alpha$ in degrees} to the original phase of $v_s$, that gave us a new phase of $-90$ degrees, seen in figure \ref{fig:phase}. In addition, to calculate the phases with the use of the \textit{atan} function of Octave, we defined an angle interval of $[-270; -90]$ degrees. This two modifications caused a subtraction of $180$ degrees to all the phases of the circuit, for the theoretical analysis. However given that NGSpice did not recognize any cosine command, we still used a sine function to define $v_s(t)$ in the simulation section. Given this, the interval of the phases shown in Section \ref{sec:analysis} has a difference of $-90$ degrees. \par 
+This laboratory assignment was very important, as it was one of our first contacts with the solving of circuits containing alternate sources and non linear components, as well as to improve our skills on using NGSpice and LaTeX.
+
+

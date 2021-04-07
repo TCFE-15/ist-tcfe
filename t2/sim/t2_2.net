@@ -1,0 +1,24 @@
+* Title: Lab 2 Circuit (t=0)
+
+*saving the currents
+.options savecurrents
+
+*Netlist
+.include netlist2.mod
+
+* Control commands
+.control
+
+op
+
+echo  "op2_TAB"
+print all
+echo  "op2_END"
+
+
+
+quit
+
+.endc
+
+.end

@@ -1,0 +1,124 @@
+\section{Simulation Analysis}
+\label{sec:simulation}
+In this section we analyzed the circuits behavior for different instances according to what was asked in the "Simulation" section of the lab instructions.\par
+To obtain the values and use them correctly in NGSpice, the variables calculated by the Python script were read by Octave and afterwards a $.mod$ file was created in order to send the values to the NGSpice's netlist. This way, if the variables given by Python were to change, that modification is ran through octave and sent directly to the NGSpice files.\par 
+The comparison of the simulated and theoretical results will be presented in Section \ref{sec:conclusion}\par
+
+
+\subsection{Operating Point Analysis for \textbf{$t<0$}}
+\label{sec:sim1}
+The first step to analyze this circuit according to the steps given by the instructions was to analyze the circuit's behavior when $t<0$, this is, the values of current through the components and voltages in the nodes of the circuit for when $vs=Vs$ but enough time has passed and the voltage through the capacitor is constant (the capacitor is fully loaded or unloaded) and the current flowing through the capacitor is zero. \par 
+To run this study we declared all the variables, and as stated above, $vs$ being $Vs$, without the sinusoidal response being active yet. After that we made a $.op$ analysis that gave us the following results\footnote[1]{\textit{@rn[i]} is the current flowing through $R_n$ and \textit{v(n)} is the voltage $V_n$(voltage in node $n$)}\footnote[2]{\textit{fic} represents a fictitious node between $R_6$ and $GND$ (or $V_{~4}$ according to the notation used in section \ref{sec:analysis}), created in Ngspice in order to properly define the current dependent voltage source $V_c$ (as required by NGSpice syntax). It is supposed to be in the same node as \textit{GND}; therefore, they have the same voltage value.}:
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|r|}
+		\hline    
+		{\bf Name} & {\bf NGSpice Value [A or V]} \\ \hline
+		\input{../sim/op1_tab}
+			
+	\end{tabular}
+	\caption{Simulated results for $t<0$. Current in Ampere [A] and Voltage in Volt [V]}
+    \label{tab:ngspice1}
+\end{table}
+\FloatBarrier
+
+\subsection{Operating Point Analysis for $v_s(t)=0$}
+For the second part of the simulation analysis, we made a study on the circuit's response when there was no independent voltage source. This point is important under the simulations analysis because it will provide us the values of the currents and voltages flowing through every node at point $t=0$. If we see the function that defines $vs(t)$, we see that $vs(0)=0$ and we also take into consideration that the voltage flowing through the capacitor has to be constant(The current flowing through the capacitor is given by the expression: $I_{capacitor}=C\cdot\frac{dv_{capacitor}}{dt}$ and in order to be able to differentiate, the voltage $v_{capacitor}$ must be differentiable in order to time).\par Introducing a new variable $V_X=V_6-V_8$ that represents the voltage going through the capacitor, we know that this value in $t=0$ will have to be equal to the value in $t=0^{-}$. Given that the values calculated in point \ref{sec:sim1} were constant, to calculate the difference $V_X(0^{-})=V_6(0^{-})=V_8(0^{-})$ we can use the values obtained for $t<0$. and with this we will obtain the initial($t=0$) values for the voltage in each node and the current in each branch. After we discover this value, we replace the capacitor with the voltage source $V_X$, and with this we can calculate the values we want. \par
+This is a very important step because we will obtain the values of the voltages that the nodes present for t=0. And considering that for $t\geq0$ the dependent voltage source is continuous, so will be all the rest of the components, therefore the values we get in this part can be used as a boundary condition for the voltages in all the nodes, as we will see in in Sections  \ref{sec:sim3} and \ref{sec:sim4}.\par
+Applying the alterations stated above, we obtained the following results:
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|r|}
+		\hline    
+		{\bf Name} & {\bf NGSpice Value [A or V]} \\ \hline
+		\input{../sim/op2_tab}		
+	\end{tabular}
+	\caption{Simulated results for $v_s=0$. Current in Ampere [A] and Voltage in Volt [V]}
+	\label{tab:ngspice2}
+\end{table}
+\FloatBarrier
+
+We must also note that this process gave us the equivalent resistance $R_{eq}$ (in this case where the only resistance that has current flowing through is $R_5$, we quickly conclude that $R_{eq}=R_5$) that gives us the time constant $\tau=R_{eq}\cdot C$ that could be used to calculate the function of $V_X(t)=V_X(\infty)+[V_X(0)-V_X(\infty)]e^{-\frac{t}{\tau}}$.\par 
+However, for this lab we did not use this generic solution, instead we discovered the natural and forced solutions, as it was already explained in Section \ref{sec:analysis}. But considering that to calculate the natural solution of $V_X$, we also need $\tau$ (Natural solution= $V_X(t)=Ae^{-\frac{t}{\tau}}$), the calculation of $R_{eq}$ was necessary to be able to do the theoretical analisys.\par
+
+\subsection{Natural Solution of $v_6(t)$}
+\label{sec:sim3}
+The natural solution of a component in a circuit is the response of the element in study (voltage or current) if there was no independent voltage source active. To obtain the natural response of the voltage in node 6 we must ignore the action of vs(t). Therefore we declared Vs as being a constant voltage source of 0V. After that we put back the capacitor we had replaced by a voltage source $V_X$ in the previous section, and finally we used the boundary conditions of $v_6$ obtained also in the section above. We were able to do this using the \textit{.ic} mode that allowed us to tell NGSpice the values for certain node voltages at instance t=0.\par
+Then we printed the transient analysis in the time interval of $[0; 20]ms$ and in the image below we present the graph of the natural response of $v_6(t)$:
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.6\linewidth]{3v6}
+	\caption{Natural solutions of $v_6(t)$ in Volt [V]}
+	\label{fig:sim3}
+\end{figure}
+\FloatBarrier
+
+\subsection{Total (natural+forced) solution of $v_6(t)$}
+\label{sec:sim4}
+In this section we finally calculated the total response of the voltage in $v_6(t)$ using once again the \textit{.ic} feature of NGSpice and setting the same boundary conditions as previously stated, declared the voltage source with it's representative function ($v_s(t)=sin(2\pi f)$, for $t\geq 0$). Once we reconsidered the voltage source and the boundary conditions we were able to obtain the total responce in node 6. In Figure \ref{fig:sim4} we show the result of $v_6(t)$ and and the stimulus voltage $v_s(t)$.\par 
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.6\linewidth]{ponto4ngspice}
+	\caption{Total solution of $v_6(t)$ (red) and stimulus $v_s(t)$ (blue) in Volt [V]}
+	\label{fig:sim4}
+\end{figure}
+\FloatBarrier
+
+%AFINAL AINDA NÃO ERA PARA COMPARAR MAS FICA AQUI NÃO VÁ O DIABO TECÊ-LAS
+As we expected, the two graphs are not equal. First of all, $v_6(t)$ presents a sinusoidal shape, but also an exponentially decaying shape. This happens because node 6 is associated to the capacitor, that isn't a linear component. Instead, the capacitor's associated voltage presents an exponential behavior. Given by the Superposition Theorem, every independent voltage or current source has a contribution to every voltage and current values of the circuit and if we study the circuit without the voltage source (natural response-exponential shape) and then just analyzed the circuit without the boundary conditions (forced solution-sinusoidal shape), once again according to the Superposition Theorem, the final result should be the sum of the two. And this sum will present both an exponential and sinusoidal shape such as the one seen in the figure above for $v_6(t)$.
+We also see that at the end, after some time has passed, the capacitor unloads, and it stops having an effect on the circuit, has it will only present a sinusoidal shape, because it is affected by the source $v_s(t)$.
+Additionally, we note that the the two graphs have different phases, therefore their crests and troughs are not aligned, besides having the same period and frequency. This happens, once again, because the capacitor is not a linear component, therefore it will have an impedance $Z_{c}=\frac{1}{i\cdot \omega \cdot C}$. This will have an effect on the phase of the voltages around the capacitor, as we can see by comparing the two solutions.
+
+\subsection{Frequency analysis}
+Lastly, we analyzed the variation of the phasors of voltages $v_s(t)$ and $v_6(t)$ in function of the frequency. For this we, once more, declared the values in NGSpice, and ran an \textit{ac} analysis in the programm. The graph we obtained for the voltage's Magnitudes in function of the frequency is the following:
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.6\linewidth]{5ngspice_amplitudev6vs}
+	\caption{Graphs of the Magnitude [dB] of $v_6(f)$ (red) and $v_s(f)$ (blue).}
+	\label{fig:sim5.1}
+\end{figure}
+\FloatBarrier
+
+First of all we see that the Magnitude of $v_s$ is always 0 dB which is expected once that $v_s(t)$ is the independent voltage source and is given by $v_s(t)=1\cdot sin(2\pi f\cdot t)$, therefore the Magnitude does not depend on the frequency, and it should be always 1V=0dB\footnote{$0 dB= 20\cdot log_{10}(1V)$}\par 
+
+However the same does not apply to the Magnitude of $v_6$. As we know and calculated in Section \ref{sec:analysis}, the phasors of the voltages on the nodes are dependent on linear components such as resistors and dependent linear sources. But we also have a capacitor with an impedance $Z_{c}=\frac{1}{i\cdot \omega \cdot C}$. Since this is the only component that depends on the frequency value\footnote{$\omega = 2\pi f$}, the capacitor will be responsible for giving a non linear behavior to the phasors surrounding it. \par 
+Analyzing the curve for $v_6(f)$ we see that for frequencies between the values of $[0,1; 10]Hz$ and $[10^{4}; 10^{6}]Hz$ the Magnitude doesn't show significant change, and we could even say it stays constant, approximately. On the other hand, for an interval of $[10; 10^{3}]Hz$ there is a rapid decrease of the value of Magnitude in dB. This has already been mentioned in subsection \ref{sec:step6}.
+
+
+%This could be explained because for frequencies too big, the value of $Z_{c}$ will be very small, and changes of frequency become almost irrelevant. On the contrary, if the frequency is too the or too small 
+
+%%%In the graph we see that for frequencies smaller than 1Hz ($\frac{1}{2}<Z_{C}<$)the Magnitude is almost constant ()
+
+%%We know from theory that this circuit can be reduced to a circuit with a voltage source $v_X(t)=v_6(t)-v_8(t)$, an equivalent resistance $R_{eq}$ and the capacitor $C$ and it will
+
+To see the influence of the frequency in the voltage's phase, we get the following graph\footnote{The values of the NGSpice graph are shown in an interval of [-180;0] Degrees.}:
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.6\linewidth]{5ngspice_phasev6vs}
+	\caption{Graphs of the Phase of $v_6(f)$ (red) and $v_s(f)$ (blue) in Degrees}
+	\label{fig:sim5.2}
+\end{figure}
+\FloatBarrier
+
+Once again, we see that the phase for $v_s$ does not change according to the frequency. As we saw previously, this is as expected given that the frequency does not have any influence on the independent voltage source, therefore the phase remains equal to zero, considering that is it's inicial phase.\par
+Differently, the phase of $v_6$ does show a dependency on the frequency, showing a decaying curve with the increase of frequency, but only until a certain point. Afterwards it seems to stabilize again. Once again this has already been justified above in subsection \ref{sec:step6}
+
+In addition to the figures above we also printed the Magnitude and phase of $v_c(f)$, defined by the instructions as the voltage flowing through the capacitor, given by $v_c(f)=v_6(f)-v_8(f)$, in the same graph, so that we could later compare it to the theorical results. The graphs are as follows:
+
+\FloatBarrier
+\begin{figure}
+	\centering
+	\subfloat[Magnitude (dB)]{\includegraphics[trim=0 0 0 200, clip, width=0.45\linewidth]{5ngspice_amplitudetodos}}
+	\qquad
+	\subfloat[Phase (Degrees)]{\includegraphics[trim=0 0 0 200, clip, width=0.45\linewidth]{5ngspice_phasetodos}}
+	\caption{Frequency analysis on $v_6$ (red), $v_s$ (blue), $v_c$ (yellow)}
+	\label{fig:sim5.3}
+\end{figure}
+\FloatBarrier
