@@ -1,0 +1,265 @@
+\section{Theoretical Analysis}
+\label{sec:analysis}
+
+In this section, we proceed to the analysis of the circuit shown in Figure~\ref{fig:circuit}. Unlike the circuit analyzed in the previous laboratory class, which presented a constant behaviour, the circuit that we shall now examine responds differently in function of time and the frequency of the sinusoidal voltage source. This is due to the presence of the sinusoidal voltage source and the capacitor in the circuit.
+
+In order to determine the requested voltages and the currents in the circuit, no matter what the instant or the applied frequency, we shall follow a method based on six steps, as described in the laboratory guide.
+
+\subsection{Step 1: Circuit Analysis for $t < 0$}
+
+The first step is to analyze the circuit in the interval $t < 0$. For that, it is requested that we use specifically the Nodal Method, which consists in applying the Kirchhoff Current Law (KCL) to the nodes that are not connected to voltage sources, using additional equations for nodes related by voltage sources. 
+We must also note that the behaviour of the voltage source is described by the function:
+
+\begin{equation}
+	V_s(t) = V_s u(-t) + sin(2\pi f t)u(t)
+	\label{eq:voltage_source}
+\end{equation}
+, where u(t) is defined as u(t) = 
+
+\begin{equation}
+\begin{cases}
+	0, t < 0 \\
+	1, t \geq 0 \\
+\end{cases}
+\end{equation}
+
+Hence, for $t < 0$, $V_s(t) = V_s$, which is a constant. As the current ($i(t)$) in the capacitor is defined by 
+
+\begin{equation}
+	i_C(t) = C\frac{dv_C}{dt}.
+	\label{eq:voltage_source}
+\end{equation}
+, we conclude that $i(t)$ is 0 for $t < 0$, that is, the capacitor behaves like an open circuit in this interval of time.
+
+So, at this point, the circuit can be treated like a simple circuit containing only resistors and a constant voltage source. We can, then, apply the Nodal Method to determine the voltage in all the nodes of the circuit, hence obtaining the following matricial equation:
+
+\begin{equation}
+	\begin{bmatrix}
+		1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		G_1 & -G_1 - G_2 -G_3 & G_2 & 0 & G_3 & 0 & 0 & 0 \\
+		0 & -K_b - G_2 & G_2 & 0 & K_b & 0 & 0 & 0 \\
+		0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 & 1 & 0 & K_dG_6 & -1 \\
+		0 & -K_b & 0 & 0 & K_b + G_5 & -G_5 & 0 & 0 \\
+		0 & 0 & 0 & 0 & 0 & 0 & G_6 + G_7 & -G_7 \\
+		G_1 & -G_1 & 0 & 0 & -G_4 & 0 & G_7 & -G_7 
+	\end{bmatrix}
+	\begin{bmatrix}
+		V_1 \\
+		V_2 \\
+		V_3 \\
+		V_4 \\
+		V_5 \\
+		V_6 \\
+		V_7 \\
+		V_8
+	\end{bmatrix}
+	=  
+	\begin{bmatrix}
+		V_s \\
+		0 \\
+		0 \\
+		0 \\
+		0 \\
+		0 \\
+		0 \\
+		0
+	\end{bmatrix}
+\end{equation}
+ 
+ By solving this equation, we obtained the results expressed in the Table ~\ref{tab:nodal1}
+ 
+ \FloatBarrier
+ \begin{table}[h]
+ 	\centering
+ 	\begin{tabular}{|l|r|}
+ 		\hline    
+ 		{\bf Name} & {\bf Value [A or V]} \\ \hline
+ 		\input{../mat/oct1_tab}
+ 	\end{tabular}
+ 	\caption{Step 1: Solutions given by the Nodal Method. {\em I} stands for currents, which
+ 		are expressed in Ampere; {\it V} represents voltages, which are expressed in
+ 		Volt.}
+ 	\label{tab:nodal1}
+ \end{table}
+ \FloatBarrier
+ 
+\subsection{Step 2: Circuit Analysis for $t = 0$}
+
+The second step aims to determine the value of the equivalent resistance as seen by the capacitor terminals. This is important because, after that, we can simplify the circuit to a simple V-R-C circuit, with just one voltage source, one capacitor and one resistor, whose value is the equivalent resistance. The capacitor, then, discharges through this resistor, with an associated time constant given by $RC$, where $R$ is the equivalent resistance and $C$ is the capacity of the capacitor.
+
+In order to obtain, the equivalent resistor, we shall analyze the circuit at the instant $t$ = 0. We add that we first need to "switch off" the independent voltage source, that is, put its voltage to zero. We must also add that we must replace the capacitor with a voltage source $V_x = V_6 - V_8$, where $V_6$ and $V_8$ are the voltages in the nodes 6 and 8, respectively, as obtained in the previous step. We run, again, the Nodal Analysis, which leads to the following equation:  
+
+\begin{equation}
+	\begin{bmatrix}
+		1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		G_1 & -G_1 - G_2 -G_3 & G_2 & 0 & G_3 & 0 & 0 & 0 \\
+		0 & -K_b - G_2 & G_2 & 0 & K_b & 0 & 0 & 0 \\
+		0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 & 1 & 0 & K_dG_6 & -1 \\
+		0 & 0 & 0 & 0 & 0 & 1 & 0 & -1 \\
+		0 & 0 & 0 & 0 & 0 & 0 & G_6 + G_7 & -G_7 \\
+		G_1 & -G_1 & 0 & 0 & -G_4 & 0 & G_7 & -G_7 
+	\end{bmatrix}
+	\begin{bmatrix}
+		V_1 \\
+		V_2 \\
+		V_3 \\
+		V_4 \\
+		V_5 \\
+		V_6 \\
+		V_7 \\
+		V_8
+	\end{bmatrix}
+	=  
+	\begin{bmatrix}
+		0 \\
+		0 \\
+		0 \\
+		0 \\
+		0 \\
+		V_x \\
+		0 \\
+		0
+	\end{bmatrix}
+\end{equation}
+
+Solving the equation produces the results presented in Table ~\ref{tab:nodal2}
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|r|}
+		\hline    
+		{\bf Name} & {\bf Value [A, V, $\Omega$ or s]} \\ \hline
+		\input{../mat/oct2_tab}
+	\end{tabular}
+	\caption{Step 2: Solutions given by the Nodal Method.}
+	\label{tab:nodal2}
+\end{table}
+\FloatBarrier
+
+The equivalent resistance is now determined through Ohm's Law: $R_{eq} = \frac{V_x}{I_x}$       % Inserir valor da resistência equivalente
+Then, the time constant is given by $\tau$ = $RC$        										%Inserir valor da time constant.
+
+
+
+
+\subsection{Step 3: Natural solution for $t > 0$}
+
+For $t > 0$, the voltage source changes to a sinusoidal behaviour, defined by $v_s(t)$ = $sin(2\pi ft)$. Consequently, $i_C(t)$ is no more null for $t > 0$, because $\frac{dv_C}{dt} \not= 0$ at this point. Hence, the capacitor begins to discharge through the equivalent resistor, and its behaviour is defined by the following first order Linear Ordinary Differential Equation (LODE), extracted by applying the Kirchhoff Voltage Law to the simplified V-R-C circuit:
+
+\begin{equation}
+	RC\frac{dv_6}{dt} + v_6(t) = v_s
+	\label{eq:kvl2}
+\end{equation}
+, where $v_6(t)$ is the function that describes the voltage in node 6 as the time flows. The solution for this equation has two components: the natural solution and the forced solution. This third step consists in the determination of the natural solution, which consists in the solution for the homogeneous equation. This is an equation of the type $v_{6n}(t)$ = $Ae^{-\frac{t}{RC}}$. A is a constant that is simply determined by analyzing the value of $v_{6n}(t)$ at the instant $t = 0$, which allows to conclude that A = $V_6$, where $V_6$ is the value of the voltage in node 6 determined in the previous step.
+
+In short, $v_{6n}(t) = V_6e^{-\frac{t}{RC}}$, for $t > 0$, as shown in the next plot:
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{ponto3teorico}
+	\caption{Natural solution for $v_6(t)$}
+	\label{fig:ponto3teorico}
+\end{figure}
+\FloatBarrier
+\subsection{Step 4: Forced Solution for $t > 0$ and $f$ = 1 KHz}
+
+In this fourth step, we shall proceed to the determination of the forced solution from the previously mentioned LODE. We relied on the impedance method to achieve this goal. The application of this method consists in a series of stages, that we shall further describe:
+\begin{itemize}
+	\item First, we need to replace the sinusoidal voltage source by its complex amplitude, also known as phasor. As described in the previous subsection, $v_s(t)$ is given by $sin(2\pi ft)$. Having in mind that $e^{i\phi}$ equals $cos(\phi) + i sin(\phi)$ (Euler's Equation), we decided to convert $v_s(t)$ from a sine to a cosine, in order to apply the previous relation. Therefore, we rewrote, now, $v_s(t)$ as $cos(2\pi ft)$, which corresponds to the phasor $e^{-i\frac{\pi}{2}}$.
+	\item Then, we shall replace each of the remaining components by their respective impedances. The impedance of each resistor is its resistance, and the impedance of the capacitor is given by $\frac{1}{i\omega C}$, where $\omega$ = $2\pi f$ is the radian frequency, which is the same as the source (we note that a sinusoidal excitation implies a sinusoidal forced solution at the same frequency), and C is the capacity of the capacitor.
+	\item Now, it is time to solve the circuit by applying, once more, the Nodal Method (as requested in the laboratory guide).
+	\item Finally, we convert the obtained phasor voltages to real time functions, multiplying the phasor by $e^{i\omega t}$ and extracting the real part (the only one that we are interested on).
+\end{itemize}
+
+This procedure led to the following matricial equation:
+
+\begin{equation}
+	\begin{bmatrix}
+		1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		G_1 & -G_1 - G_2 -G_3 & G_2 & 0 & G_3 & 0 & 0 & 0 \\
+		0 & -K_b - G_2 & G_2 & 0 & K_b & 0 & 0 & 0 \\
+		0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 & 1 & 0 & K_dG_6 & -1 \\
+		0 & K_b & 0 & 0 & -K_b - G_5 & G_5 + i\omega C & 0 & -i\omega C \\
+		0 & 0 & 0 & 0 & 0 & 0 & G_6 + G_7 & -G_7 \\
+		G_1 & -G_1 & 0 & 0 & -G_4 & 0 & G_7 & -G_7 
+	\end{bmatrix}
+	\begin{bmatrix}
+		V_1 \\
+		V_2 \\
+		V_3 \\
+		V_4 \\
+		V_5 \\
+		V_6 \\
+		V_7 \\
+		V_8
+	\end{bmatrix}
+	=  
+	\begin{bmatrix}
+		e^{-i\frac{\pi}{2}} \\
+		0 \\
+		0 \\
+		0 \\
+		0 \\
+		0 \\
+		0 \\
+		0
+	\end{bmatrix}
+\end{equation}
+The obtained results are presented in Table ~\ref{tab:nodal3}
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|r|}
+		\hline    
+		{\bf Name} & {\bf Value [A or V]} \\ \hline
+		\input{../mat/oct4_tab}
+	\end{tabular}
+	\caption{Step 4: Solutions given by the Impedance Method.}
+	\label{tab:nodal3}
+\end{table}
+\FloatBarrier
+
+We notice that all the phasor voltages except $\tilde{V_6}$ are in phase with the voltage source. This is due to the fact that the resistors are linear components, and that their impedances matches their resistances.
+
+\subsection{Step 5: Total Solution}
+
+The fifth step consists on computing the total solution for the stated LODE, by just summing the natural solution to the forced solution, obtained in the previous subsections. However, we first need to convert the phasor $\tilde{V_6}$, obtained in the previous subsection, to a real time function, by applying the last stage described for the Impedance Method. This function is, then, defined as $v_{6f}(t) = |\tilde{V_6}|cos(\omega t - \phi_6)$, where $|\tilde{V_6}|$ is the absolute value of the phasor and $\phi_6$ is its phase.
+
+Therefore, $v_{6 total}(t) = v_{6n}(t) + v_{6f}(t) = V_6e^{-\frac{t}{RC}} + |\tilde{V_6}|cos(\omega t - \phi_6)$. The total solution, for the interval [-5, 20] ms, is depicted in the following plot:
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{ponto5teorico}
+	\caption{Total solution for $v_6(t)$}
+	\label{fig:ponto5teorico}
+\end{figure}
+\FloatBarrier
+
+\subsection{Step 6: Frequency Responses}
+\label{sec:step6}
+The sixth and final step of the theoretical analysis changes the focus of our study from time to frequency. We are now examine how the circuit behaves in function of the frequency ($f$) of the sinusoidal voltage source. To do so, we must reapply the method described in Step 4 to collect the phasor voltages for different values of frequency, spanning 0,1 Hz to 1 MHz. As requested, we extracted the phasor voltages $\tilde{V_6}$, $\tilde{V_8}$ and $\tilde{V_C} = \tilde{V_6} - \tilde{V_8}$, this last one corresponding to the phasor voltage in the capacitor. The magnitudes and phases of the phasors $\tilde{V_s}$, $\tilde{V_6}$ and $\tilde{V_C}$ are presented in the following plots:
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{ponto6teorico_amplitude}
+	\caption{Variation of Magnitude of $\tilde{V_6}_s$, $\tilde{V_6}_6$ and $\tilde{V_6}_C$ with frequency}
+	\label{fig:magnitude}
+\end{figure}  
+\FloatBarrier
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{ponto6teorico_phase}
+	\caption{Variation of Phase of $\tilde{V_s}$, $\tilde{V_6}$ and $\tilde{V_C}$ with frequency}
+	\label{fig:phase}
+\end{figure} 
+\FloatBarrier
+
+Concerning the phase plot, while the phase of the source remains constant and equal to -90 degrees, the phases of the phasors $\tilde{V_6}$ and $\tilde{V_C}$ tend to reduce. When frequency tends to infinity, the phase of $\tilde{V_6}$ converges to -270 degrees. On the other hand, the phase of $\tilde{V_C}$ converges to -180 degrees. The phase of $\tilde{V_8}$ is the same as the phase of $\tilde{V_s}$, as shown in the table provided in Step 4. Therefore, the phase of $\tilde{V_C}$ is the phase of $\tilde{V_6}$ atenuated by 90 degrees (in terms of absolute value). That's why the difference between the phases of $\tilde{V_6}$ and $\tilde{V_C}$ is 90 degrees when frequency tends to infinity.
+
+For low frequencies, $sin(\omega t)$ is very close to 0; therefore, the circuit behaves aproximately like the voltage source had been switched off. The voltage in node 6 corresponds, then, to the natural solution, which is constant in order to the frequency. That's why the magnitude is presented, in the plot, as constant at low frequencies. Changing our focus, now, to the high frequencies, we notice that the magnitude of $\tilde{V_6}$ tends to stabilize. Therefore, the magnitude of $\tilde{V_8}$ must be progressively increasing, given that the magnitude of $\tilde{V_C}$ is negative and is increasing in absolute value.

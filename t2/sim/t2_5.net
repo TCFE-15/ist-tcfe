@@ -1,0 +1,47 @@
+* Title: Lab 2 Circuit (frequency analysis)
+
+*saving the currents
+.options savecurrents
+
+*Netlist
+.include netlist4.mod
+
+* Control commands
+.control
+*makes plots in color
+set hcopypscolor=1
+set color0=white
+set color1=black
+set color2=red
+set color3=blue
+set color4=violet
+set color5=rgb:3/8/0
+set color6=rgb:4/0/0
+
+op
+
+print all
+
+
+echo "********************************************"
+echo  "Frequency analysis"
+echo "********************************************"
+
+ac dec 100 0.1 1MEG
+
+plot db(v(6)) db(v(1)) db(v(6,8))
+plot 180/ PI * phase (v(6)) 180/ PI * phase (v(1)) 180/ PI * phase (v(6,8))
+hardcopy 5ngspice_amplitudev6vs.ps db(v(6)) db(v(1)) 
+echo 5ngspice_amplitudev6vs_FIG
+hardcopy 5ngspice_amplitudetodos.ps db(v(6)) db(v(1)) db(v(6,8))
+echo 5ngspice_amplitudetodos_FIG
+hardcopy 5ngspice_phasetodos.ps 180/ PI * phase (v(6)) 180/ PI * phase (v(1)) 180/ PI * phase (v(6,8))
+echo 5ngspice_phasetodos_FIG
+hardcopy 5ngspice_phasev6vs.ps 180/ PI * phase (v(6)) 180/ PI * phase (v(1))
+echo 5ngspice_phasev6vs_FIG
+
+
+quit
+.endc
+
+.end
