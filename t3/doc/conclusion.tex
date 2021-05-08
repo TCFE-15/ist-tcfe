@@ -1,0 +1,78 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+To start this conclusion we will compare all the results we obtained in NGSpice and in Octave side by side. As explained in Section \ref{sec:simulation}, although the time intervals for Octave and NGSpice plots are different, they are equivalent. This is because this circuit's output voltage, even if it's not a sinusoidal function, will be periodical, so for different, but equivalent time intervals, they should have the same plots.
+
+
+Starting of with the Envelope Detector $v_C$ plots:
+
+\FloatBarrier
+\begin{figure}
+	\centering
+	\subfloat[Octave]{\includegraphics[ width=0.45\linewidth]{envelopeDetectorOctave}}
+	\qquad
+	\subfloat[NGSpice]{\includegraphics[trim=0 60 0 200, clip, width=0.45\linewidth]{venvelope}}
+	\caption{Envelope Detector Output}
+	\label{fig:conc2}
+\end{figure}
+\FloatBarrier
+
+As we can see these are quite similar but show some differences when it comes to their Y axis. This will happen for all plots because of the different assumptions that took place in the making of this analysis, such as modeling each diode as a set of a Voltage Source $V_{ON}$ and an ideal diode in the theoretical analyses, opposite to NGSpice that doesn't follow the same model.
+
+Let's see if these differences affect the Voltage Regulator's results:
+\FloatBarrier
+\begin{figure}
+	\centering
+	\subfloat[Octave]{\includegraphics[ width=0.45\linewidth]{voltageRegulatorOctave}}
+	\qquad
+	\subfloat[NGSpice]{\includegraphics[trim=0 60 0 200, clip, width=0.45\linewidth]{vdc}}
+	\caption{Voltage Regulator Output}
+	\label{fig:conc3}
+\end{figure}
+\FloatBarrier
+
+There are also some differences shown above. Again, this happens because we used different models. Also, whilst in the theoretical analyses we immediately used $V_O=12$V as the DC component of the voltage output, this was not the case in the NGSpice model, therefore they show a lag in the Y axis, because their average values will differ. However this difference is quite low, so it can go unnoticed by the human eye. There's also a small variation in the range of values for both plots, just like in Figure \ref{fig:conc2}. The same explanation is applied here.~
+
+\FloatBarrier
+\begin{figure}
+	\centering
+	\subfloat[Octave]{\includegraphics[ width=0.45\linewidth]{V_oMenos12Octave}}
+	\qquad
+	\subfloat[NGSpice]{\includegraphics[trim=0 60 0 200, clip, width=0.45\linewidth]{vacdeviation}}
+	\caption{Output AC component + DC deviation}
+	\label{fig:conc4}
+\end{figure}
+\FloatBarrier
+
+As explained before, there is a lag in the Y axis for the DC Voltage output $V_o$, so the graphics above are off in their $v_o$ values by a constant difference that is the error od the DC deviation. But the AC component is also expected to show differences, once again, because of the different models used in each analyses.
+
+Given that the final output voltage $V_o$ is the Voltage detector output, we won't present the same graphics again and this comparison has already been done in the side by side Voltage Detector graphics.
+
+Finally, let's see how was our merit.
+Knowing that we used 21 diodes in total, two resistances with a summed value of 20.4 $k\Omega$ and a capacitor of 60 $\mu$F, the final cost will be:
+\begin{equation}
+	Cost=21\cdot0.1+20.4\cdot1+60\cdot1=82.5 M.U.
+\end{equation}
+Therefore, using the equation given in the instructions, our merit is given by: 
+\begin{equation}
+	Merit=\frac{1}{82.5\cdot((1.597\cdot10^{-2})+10^{-6})}
+\end{equation}
+We programmed NGSpice to give us this value, and the result is in the following table:
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|r|}
+		\hline    
+		{\bf Name} & {\bf NGSpice Value [V]} \\ \hline
+		\input{../sim/op3_tab}		
+	\end{tabular}
+	\caption{Merit calculated in NGSpice}
+	\label{tab:ngspice3}
+\end{table}
+\FloatBarrier
+
+Therefore our merit was $M=0.7589514$
+This came from a combination of how the values adjusted considering n (characteristic of the transformer), trying to balance a low cost with low errors, even thought high capacitance and resistor values would mean lower error, we found that the values used gave us the best merit we were able to achieve.
+
+

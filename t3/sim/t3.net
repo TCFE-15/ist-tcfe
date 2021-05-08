@@ -1,0 +1,115 @@
+*
+* ac/dc com transformer
+*
+
+* forces current values to be saved
+.options savecurrents
+
+******************************************
+* input voltage source
+vin 6 0 sin(0 230 50)
+
+*transformador
+*V2 nulo entre 1 e 1 :/
+V2 fic1 1 0V
+*current controlled current source
+F1 6 0 V2 0.22641
+
+*voltage controlled voltage source
+E1 fic1 0 6 0 0.22641
+* positive limiter
+Dp1 1 2 Default
+Dp2 4 0 Default
+
+* negative limiter
+Dn1 0 2 Default
+Dn2 4 1 Default
+
+* capacitor(s)
+C1 2 4 60u   
+*quanto maior o C, menor o ripple mas isto é caríssimo
+*resistência envelope detector
+Renv 2 4 15k
+*resistencia voltage regulator
+Rvolt 2 3 5.4k
+
+*diodos
+Dr1 3 a Default
+Dr2 a b Default
+Dr3 b c Default
+Dr4 c d Default
+Dr5 d e Default
+Dr6 e f Default
+Dr7 f g Default
+Dr8 g h Default
+Dr9 h i Default
+Dr10 i j Default
+Dr11 j k Default
+Dr12 k l Default
+Dr13 l m Default
+Dr14 m n Default
+Dr15 n o Default
+Dr16 o p Default
+Dr17 p 4 Default
+
+.model Default D
+.op
+.end
+
+.control
+*makes plots in color
+set hcopypscolor=1
+set color0=white
+set color1=black
+set color2=red
+set color3=blue
+set color4=violet
+set color5=rgb:3/8/0
+set color6=rgb:4/0/0
+
+******************************************
+* analise no tempo
+tran 1e-3 1.206 1.006
+
+plot  v(3,4) v(1)
+plot  v(3,4)
+plot v(3)-v(4)-12
+plot v(2,4) 
+
+let vdc = v(3)-v(4)
+meas tran vavg AVG vdc from=1.006 to=1.206
+meas tran vmin MIN vdc from=1.006 to=1.206
+meas tran vmax MAX vdc from=1.006 to=1.206
+*alterei o intervalo por isso dá algo diferente do início
+
+echo  "op1_TAB"
+print vavg
+print vmin
+print vmax
+echo  "op1_END"
+
+echo  "op2_TAB"
+print abs(vmax-vmin)
+print abs(vavg-12)
+print abs(vavg-12)+abs(vmax-vmin)
+echo  "op2_END"
+
+echo  "op3_TAB"
+print 1/((abs(vavg-12)+abs(vmax-vmin)+0.000001)*(60+15+5.4+2.1))
+echo  "op3_END"
+
+*getting the figures
+hardcopy vdc.ps v(3,4) 
+echo vdc_FIG
+hardcopy vdc_vs.ps v(3,4) v(1)
+echo vdc_vs_FIG
+hardcopy vdc_vs_vin.ps v(3,4) v(1) v(6)
+echo vdc_vs_vin_FIG
+hardcopy vacdeviation.ps v(3)-v(4)-12 
+echo vacdeviation_FIG
+hardcopy venvelope.ps v(2,4)
+echo venvelope_FIG
+
+
+.endc
+

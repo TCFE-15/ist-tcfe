@@ -1,0 +1,139 @@
+\section{Theoretical Analysis}
+\label{sec:analysis}
+
+In this section, we shall analyze the circuit shown in Figure~\ref{fig:circuit}. Unlike the circuits analyzed in the previous laboratory classes, which only contained linear components (voltage and current sources, resistors and capacitors), the AC/DC converter circuit presents a non-linear behaviour, due to the presence of diodes, which are semiconductor components.
+The design of the AC/DC converter consisted, then, in two different stages, as described in the theoretical lectures: the Envelope Detector and the Voltage Regulator. We were given the freedom to use whatever component we wanted in order to achieve a DC Voltage of 12 V at the output of the Voltage Regulator circuit, although at the cost of some predefined monetary units (MU), as it will be reflected on our figure of merit.
+
+
+\subsection{Stage 1: Envelope Detector}
+
+The first part of our circuit was to design a proper Envelope Detector, in which the input sinusoidal voltage ($v_{IN} = Acos(\omega t) [V]$)would be converted to a signal with no negative values of voltage, while also intending to attenuate the voltage fall to zero (characteristic of the sinusoidal behaviour), with the goal of getting a more constant output voltage, in preparation for the Voltage Regulator part of the circuit (discussed in the next subsection).
+This was possible due to the use of diodes and a capacitor.
+
+The diodes' function in the Envelope Detector was to rectify the input voltage, which was defined as being sinusoidal, as required in the laboratory guide. It was taught in the theoretical classes that a forwardly biased diode would only let pass through voltages with the same direction as the forward bias one. Therefore, a forwardly biased diode with its positive terminal connected to the positive terminal of a voltage source only conducts positive levels of voltage superior to a predetermined level, dubbed $V_{ON}$, which is a characteristic property of the diode (in this case, we considered it as approximately 0,7 V). This interesting property allows to establish the so-called Diode Bridge, a device consisting of four diodes disposed as shown in Figure~\ref{fig:circuit}, whose output voltage corresponds to the absolute value of the input voltage. Hence, implementing a Diode Bridge in our circuit would allow to not only rectify the input signal, but also diminish the time constant ($\tau = R_{eq} C$) required to have the smallest ripple (difference between the maximum and the minimum of the output voltage) possible. That's why we decided to implement a Diode Bridge into our design.
+
+On the other hand, it was necessary to include a capacitor, that, by discharging, would allow to make the output signal as constant as possible, thus reducing the ripple.
+
+We also added a resistor in parallel with the capacitor, as we stated that this addition would simplify our theoretical calculations, by making the circuit more similar to the one presented in the theoretical classes.
+
+Now, we shall proceed to the theoretical analysis of the Envelope Detector circuit. First, we must note that the two inductors which constitute the transformer can be modeled by a current controlled current source on the primary and a voltage controlled voltage source ($v_S$) on the secondary. In what concerns to this analysis, only the voltage source matters, inputting a sinusoidal voltage with amplitude $\frac{A}{n}$ to the circuit, where $A$ is the amplitude of the input signal at the transformer (230 V, as given in the laboratory guide) and $n$ is the ratio between the number of spires on the primary and the one on the secondary.
+Then, for a matter of simplicity and convenience, we modeled each diode as a set of a voltage source, $V_{ON} = 0,7 V$, and an ideal diode. As a result of the Diode Bridge behaviour, only two diodes will be on at each instant: two when the input sinusoidal voltage is positive, and the other two when it presents negative values. As we defined each diode as a group of a voltage source and an ideal diode, the allowed voltage levels in the circuit are the ones for which $|v_S| - 2V_{ON}$ is positive; when this value is negative, the voltage in the circuit will be null. This behaviour is shown in Figure~\ref{fig:vSFinal}.
+
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{p1}
+	\caption{Modeled Diode Rectified Voltage Signal}
+	\label{fig:vSFinal}
+\end{figure}   
+
+We must, now, explain how we modeled the voltage in capacitor (and, consequently, in the resistor in parallel). As explained in the theoretical classes, this voltage presents two stages: a sinusoidal stage and an exponential stage. In fact, the sinusoidal input signal will charge the capacitor up to its amplitude value and, then, the capacitor discharges, as long as the negative exponential presents greater values than the sinusoidal signal. When the sinusoidal signal becomes the one with superior values again, the capacitor returns to charging, and the envelope output becomes sinusoidal again. In short, the voltage in the capacitor is, at each instant, the greater of two values: the one obtained through the rectified sinusoidal signal presented in Figure~\ref{fig:vSFinal} and the one derived from the negative exponential, defined by the equation:
+
+\begin{equation}
+	negativeExponential(t) = (\frac{A}{n} - 2V_{ON})e^{-\frac{t - t_{Aux}}{R_{eq}C}}
+	\label{eq:Exponential}
+\end{equation}
+
+In the equation, t is the time instant, C is the capacitor's capacity [F], $t_{Aux}$ [s ]is a constant corresponding to the translation of the exponential, and $R_{eq}$ is the equivalent resistor [$\Omega$] as seen by the capacitor:
+
+\begin{equation}
+	R_{eq} = \frac{1}{\frac{1}{R_{env}} + \frac{1}{R_{volt} + n_d r_d}}
+	\label{eq:R_eq}
+\end{equation}
+
+The described behaviour is, then, repeated periodically, producing a plot resembling saw teeth, as shown in Figure~\ref{fig:vEnv} We also add that this is an approximated behaviour, that further simplified the analysis of this part of the circuit.  
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{envelopeDetectorOctave}
+	\caption{Envelope Detector Output Voltage}
+	\label{fig:vEnv}
+\end{figure}
+\FloatBarrier
+
+\subsection{Stage 2: Voltage Regulator}
+
+We are, now, going through the analysis of the second part of the circuit, the Voltage Regulator, whose purpose is to attenuate the ripple in the output voltage of the Envelope Detector, aiming to achieve a final output of 12 V with the shortest ripple possible. For that, we connected a series of a resistor and a total of $n_D$ diodes to the terminals of the capacitor. This solution is similar to the one presented in the theoretical classes, and can be explained using Incremental Analysis, which proved to be a very useful tool.
+According to Incremental Analysis, the output voltage, $V_o$, is defined as the sum of two components:
+
+\begin{equation}
+	V_o = V_O + v_o
+	\label{eq:vOutput}
+\end{equation}
+
+$V_O$ is the DC component of the output voltage, corresponding to a steady value of 12 V, as intended. On the other hand, $v_o$ is the incremental component of the output voltage, defined as an almost infinitesimal variation of $V_o$.
+
+Starting by the study of the incremental components, we should first note that, in an incremented model, each diode is represented by the respective incremental resistor, whose resistance ($r_d$) can be obtained by:
+
+\begin{equation}
+	r_d = \frac{\eta V_T}{I_S e^{\frac{V_D}{\eta V_T}}} [\Omega]
+	\label{eq:rIncremental}
+\end{equation}
+
+$I_S$ is the saturation current [A], $V_T$ is the thermal voltage [V], $\eta$ is the material constant (assumed as 1) and $V_D$ is the voltage in each diode [V], as assumed by the incremental model.
+
+Then, by applying applying Kirchhoff Voltage Law (KVL) to the Voltage Regulator mesh, we could extract the following relation for $v_o$, where $i_d$ [A] is the incremental current in the diodes and the resistor (with resistance $R_{volt}$) and $v_c$ [V] is the incremental voltage in the capacitor, given by the difference between the total voltage in the the capacitor and its DC component, $V_C$, computed as its average.
+
+\begin{equation}
+	v_o = n_D r_d i_d = \frac{n_D r_d}{R_{volt} + n_D r_d} v_c
+	\label{eq:vO_Inc}
+\end{equation}
+
+We note, as a result, that for a resistance $R_{volt}$ much greater than $r_d$, the incremental output voltage (correspondent to the ripple) tends to zero. That's why $R_{volt}$ should be as great as possible. However, $R_{volt}$ shall also be far inferior to the resistance in parallel with the capacitor, so that the latter tends to behave like an open circuit, and thus driving more current to the Voltage Regulator. 
+
+Next, by running an operating point analysis, we deduced the following relation for the voltage in each diode, $V_D$, which is assumed as a constant:
+
+\begin{equation}
+	V_D = n_d r_d i_d = \frac{V_O}{n_D}
+	\label{eq:vD_Inc}
+\end{equation}
+
+This equations allowed, hence, to produce the plots for $V_o$ and $v_o$, where we can easily notice the saw teeth-like behaviour of the output signal, like in the voltage in the capacitor. However, this time, the ripple was severely reduced, and the average output voltage is very close to 12 V, as intended. In fact, the ripple obtained through this analysis is just 0.021365 V, a very small value when compared with $V_O$ = 12 V.
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{voltageRegulatorOctave}
+	\caption{Regulator Output Voltage}
+	\label{fig:vO_Final}
+\end{figure}
+\FloatBarrier
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{V_oMenos12Octave}
+	\caption{Output AC component + DC Deviation}
+\label{fig:vO_Ripple}
+\end{figure}
+\FloatBarrier
+
+After some trial runs with NGSpice, we adopted the following values, as they produced the most favorable output voltage:
+
+A = 230 V (Input Voltage Amplitude);
+
+n = 4.416766044 (Primary-Secondary Ratio);
+
+f = 50 Hz (Voltage Source Frequency);
+
+$\omega$ = 2*pi*f [rad/s] (Radian Frequency);
+
+$R_{env}$ = 15000 $\Omega$ (Envelope Detector Resistor);
+
+C = 60e-6 F (Envelope Detector Capacitor);
+
+$V_{ON}$ = 0.7 V (Model Diode Voltage);
+
+$I_s$ = 1e-14 A (Saturation Current);
+
+$\eta$ = 1 (Material Constant);
+
+$T_{nom}$ = 300.15 K (Nominal Temperature);
+
+k = 1.38064852e-23 J/K (Boltzmann Constant);
+
+q = 1.60217662e-19 C (Electron Charge);
+
+$V_T$ = (k*Tnom)/q = 25,86491702e-3 V (Thermal Voltage);
+
+$n_D$ = 17 (Number of Diodes in the Voltage Regulator);
+
+$V_O$ = 12 V (DC Voltage Output);
+
+$R_{reg}$ = 5400 $\Omega$ (Voltage Regulator Resistor);

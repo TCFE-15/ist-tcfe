@@ -1,0 +1,96 @@
+\section{Simulation Analysis}
+\label{sec:simulation}
+In this section we defined our AC/DC transformer (seen in Figure \ref{fig:circuit}) in NGSpice.\par
+First off, we started by defining a transformer using the ideal model that says that we can substitute the inductor on the transformer's primary with a current dependent current source and the secondary's inductor is replaced by a voltage dependent voltage source, and defining the given voltage on the primary as $v_{IN}$ and the voltage that results from the transformer as $v_S$, using the model mentioned above we will have $v_{S}=\frac{v_{IN}}{n}$.
+For reference, we will be referring to the DC output voltage as $V_o$.
+
+After that we defined all the sources we designed for our circuit, used the default diode model and obtained the following plots of the Voltage outputs in $Volt$ for 10 periods: the time used was from 1.006 to 1.206 seconds because we found it would be an equivalent time interval to the one used in the theoretical analyses from 0 to 0.2 seconds. We did not use the same time intervals because in the theoretical analyses we didn't take into account possible variations that happened while initializing the circuit. But truthfully there is a different variation of the output voltages in the beginning for low time stamps. That's also why, for NGSpice, we used $t>1$ so that the circuit's output voltage was already regular.
+
+The two graphs bellow show the DC output voltage source and that same plot next to the transformed voltage $v_S$, respectively.
+
+\FloatBarrier
+\begin{figure}[h] 
+	\centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.6\linewidth]{vdc}
+	\caption{$V_{DC}$ output voltage}
+	\label{fig:vdc}
+\end{figure}
+\FloatBarrier
+
+\FloatBarrier
+\begin{figure}[h] 
+	\centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.6\linewidth]{vdc_vs}
+	\caption{$V_{S}$ (v(1)) and $V_{DC}$ (v(3,4)) side by side}
+	\label{fig:vdcvin}
+\end{figure}
+\FloatBarrier
+
+As we can see, there are oscillations (Figure  \ref{fig:vdc}), but these are almost null in comparison to the $V_{S}$ voltage (Figure  \ref{fig:vdcvin}), so much that it appears to be a straight line, which would be the case if the AC/DC converter was perfect.
+
+Unfortunately this is almost impossible, therefore we did not obtain a perfect straight line in Figure \ref{fig:vdc}, so we calculated the average and ripple values obtained in NGSpice. These results are presented in the following table:
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|r|}
+		\hline    
+		{\bf Name} & {\bf NGSpice Value [V]} \\ \hline
+		\input{../sim/op1_tab}		
+	\end{tabular}
+	\caption{Average (vavg),Minimum (vmin)and Maximum (vmax) values of $v_{O}$}
+	\label{tab:ngspice1}
+\end{table}
+\FloatBarrier
+
+We also calculated the absolute of some error values, such as:
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|r|}
+		\hline    
+		{\bf Name} & {\bf NGSpice Value [V]} \\ \hline
+		\input{../sim/op2_tab}		
+	\end{tabular}
+	\caption{Ripple (vmax-vmin), Average error (vavg-12) and the sum of both errors for $v_{O}$}
+	\label{tab:ngspice2}
+\end{table}
+\FloatBarrier
+
+As we can see, the average is very close to 12, and the error is very low. The ripple is also low, but it could have been better if we had used higher values of $C$ or $R$, however we also had to balance the costs to achieve a good merit. So we accepted this error value as it is still low.
+With both errors we will be able to calculate the merit of the circuit with the formula given in the lab assignment. This will be done in Section \ref{sec:conclusion}.
+
+
+At this point, let's take a look to the outputs of our Envelope Detector and Voltage Regulator. The first one consisted of the Diode Bridge, the resistor $R_{env}$ and the capacitor $C$. So the output of this part of the circuit is the same as the voltage flowing through the capacitor: $v_{C}$. This result is in the following plot.
+
+\FloatBarrier
+\begin{figure}[h] 
+	\centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.6\linewidth]{venvelope}
+	\caption{Envelope Detector Output}
+	\label{fig:venvelope}
+\end{figure}
+\FloatBarrier
+
+The Voltage Divider was constituted by the resistance $R_{reg}$ and the 17 diodes in series.
+Obviously, its output is the same as the DC output voltage, that we repeat in the next image.
+\FloatBarrier
+\begin{figure}[h] 
+	\centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.6\linewidth]{vdc}
+	\caption{Voltage Detector Output}
+	\label{fig:vvoltage}
+\end{figure}
+\FloatBarrier
+
+Finally, we obtained the graph of $V_{DC}-12$, this is, the output AC component + DC deviation.
+\FloatBarrier
+\begin{figure}[h] 
+	\centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.6\linewidth]{vacdeviation}
+	\caption{$v_{O}$ AC component + DC deviation}
+	\label{fig:vacdeviation}
+\end{figure}
+\FloatBarrier
+
+Given that this graph is shown in the order of mV, we can say that the results are quite good and this variation is low enough to consider this a successful AC/DC transformer.

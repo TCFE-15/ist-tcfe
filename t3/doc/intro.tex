@@ -1,0 +1,20 @@
+\pagebreak
+\section{Introduction}
+\label{sec:introduction}
+
+
+For this laboratory assignment, our objective was to create a circuit that would transform an input AC voltage into an output DC voltage, with an amplitude of 12V. In Figure \ref{fig:circuit} the stated circuit is presented. 
+In this report, we, first, proceeded to analyze the AC/DC converter, composed by an Envelope Detector Circuit and a Voltage Regulator Circuit, through a theoretical approach. Additionally, in Section \ref{sec:analysis}, we obtained some insights on the non-linearity behaviour of the circuit by presenting an approximate solution (for the envelope detector and voltage ripple calculation) as well as combined OP and incremental analysis in the voltage regulator circuit, where we superimposed both solutions referred and studied the precision (variation of $V_{o}$ - which should be as small as possible). To conclude this section, we consider it is important to refer that we bared in mind the quality of the circuit and to determine it we calculated a merit value, which acted as a system that took into account the cost of the components used, as well as the ripple and average amplitude of the output voltage. 
+
+Simultaneously, the circuit is analyzed by computational simulation tools, via NGSpice, in section \ref{sec:simulation}. Then, the simulation results are compared with the theoretical ones, obtained in Section \ref{sec:analysis}. Finally, the conclusions of this study are presented in Section \ref{sec:conclusion}.
+
+
+
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{circuitoT3}
+	\caption{Circuit that will be analysed in this lab.}
+	\label{fig:circuit}
+\end{figure}
+
+\newpage
+
