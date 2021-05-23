@@ -1,0 +1,197 @@
+.options savecurrents
+
+*deixar nas unidades certas
+
+.param Rin_value=0.1k
+.param R1_value=80k
+.param R2_value=20k
+.param Rc_value=0.7k
+.param Re_value=0.2k
+.param Rl_value=0.008k
+.param Rout_value=0.06k
+.param Ci_value=100u
+.param Cb_value=2500u
+.param Co_value=800u
+
+.csparam Rin_value={Rin_value}
+.csparam R1_value={R1_value}
+.csparam R2_value={R2_value}
+.csparam Rc_value={Rc_value}
+.csparam Re_value={Re_value}
+.csparam Rl_value={Rl_value}
+.csparam Rout_value={Rout_value}
+.csparam Ci_value={Ci_value}
+.csparam Cb_value={Cb_value}
+.csparam Co_value={Co_value}
+
+* PHILIPS BJT'S
+.MODEL BC557A PNP(IS=2.059E-14 ISE=2.971f ISC=1.339E-14 XTI=3 BF=227.3 BR=7.69 IKF=0.08719 IKR=0.07646 XTB=1.5 VAF=37.2 VAR=11.42 VJE=0.5912 VJC=0.1 RE=0.688 RC=0.6437 RB=1 RBM=1 IRB=1E-06 CJE=1.4E-11 CJC=1.113E-11 XCJC=0.6288 FC=0.7947 NF=1.003 NR=1.007 NE=1.316 NC=1.15 MJE=0.3572 MJC=0.3414 TF=7.046E-10 TR=1m2 ITF=0.1947 VTF=5.367 XTF=4.217 EG=1.11)
+.MODEL BC547A NPN(IS=1.533E-14 ISE=7.932E-16 ISC=8.305E-14 XTI=3 BF=178.7 BR=8.628 IKF=0.1216 IKR=0.1121 XTB=1.5 VAF=69.7 VAR=44.7 VJE=0.4209 VJC=0.2 RE=0.6395 RC=0.6508 RB=1 RBM=1 IRB=1E-06 CJE=1.61E-11 CJC=4.388p XCJC=0.6193 FC=0.7762 NF=1.002 NR=1.004 NE=1.436 NC=1.207 MJE=0.3071 MJC=0.2793 TF=4.995E-10 TR=1m2 ITF=0.7021 VTF=3.523 XTF=139 EG=1.11)
+
+**************
+* gain stage *
+**************
+
+Vcc vcc 0 12.0
+Vin in 0 0 ac 1.0 sin(0 10m 1k)
+Rin in in2 {Rin_value}
+
+* input coupling capacitor
+Ci in2 base {Ci_value}
+
+* bias circuit
+R1 vcc base {R1_value}
+R2 base 0 {R2_value}
+
+* gain stage
+Q1 coll base emit BC547A
+Rc vcc coll {Rc_value}
+Re emit 0 {Re_value}
+
+* bypass capacitor
+Cb emit 0 {Cb_value}
+
+****************
+* output stage *
+****************
+*ligado ao Vo da gain stage*
+
+Q2 0 coll emit2 BC557A
+Rout emit2 vcc {Rout_value}
+
+* output coupling capacitor
+Co emit2 out {Co_value}
+
+* load
+Rl out 0 {Rl_value}
+
+.control
+
+*makes plots in color
+set hcopypscolor=1
+set color0=white
+set color1=black
+set color2=red
+set color3=blue
+set color4=violet
+set color5=rgb:3/8/0
+set color6=rgb:4/0/0
+
+echo  "values_TAB"
+echo R1 = $&R1_value
+echo R2 = $&R2_value
+echo Rc = $&Rc_value
+echo Re = $&Re_value
+echo Rl = $&Rl_value
+echo Rout = $&Rout_value
+echo Ci = $&Ci_value
+echo Cb = $&Cb_value
+echo Co = $&Co_value
+echo  "values_END"
+
+op
+echo  "op1_TAB"
+print all
+print @R1[i]
+print @R2[i]
+print @Rin[i]
+print @Re[i]
+print @Rl[i]
+print @Rout[i]
+print @Ci[i]
+print @Cb[i]
+print @Co[i]
+echo  "op1_END"
+
+echo  "op2_TAB"
+print @Q1[ib]
+print @Q1[ic]
+print -@Q1[ie]
+print v(emit)
+print v(coll)
+print v(coll)-v(emit)
+print -@Q2[ie]
+print @Q2[ic]
+print v(emit2)
+echo  "op2_END"
+
+echo  "farq1_TAB"
+print v(coll)-v(emit)
+print v(base)-v(emit)
+echo  "farq1_END"
+
+echo  "farq2_TAB"
+print v(emit2)
+print v(emit2)-v(coll)
+echo  "farq2_END"
+
+* time analysis
+tran 1e-5 1e-2
+plot v(coll)
+*hardcopy voGainTran.ps vdb(coll)
+
+* frequency analysis
+ac dec 10 10 100MEG
+plot vdb(coll)
+plot vp(coll)
+hardcopy voGainFreq.ps vdb(coll)
+
+meas ac vmax MAX vdb(out) from=10 to=100MEG
+let lowerBand= vmax-3 
+meas ac f1 WHEN vdb(out)=lowerBand CROSS=1
+meas ac f2 WHEN vdb(out)=lowerBand CROSS=LAST
+meas ac fmax WHEN vdb(out)=vmax 
+let bandwidth = f2-f1
+print bandwidth
+
+plot vdb(out)
+plot vdb(out)/vdb(in2)
+plot db(v(out)/v(in2))
+hardcopy voutf.ps vdb(out)
+hardcopy vgainf.ps db(v(out)/v(in2))
+echo vgainf_FIG
+hardcopy vgainfdb.ps vdb(out)/vdb(in2)
+echo vgainfdb_FIG
+
+*input impedance in Ohm
+plot abs(v(in2)/vin#branch/(-1000))
+
+let Zinr=Re(-v(in2)[40]/vin#branch[40])
+let Zini=Im(-v(in2)[40]/vin#branch[40])
+let Zinamp= abs(-v(in2)[40]/vin#branch[40])
+let Zinphase= phase(-v(in2)[40]/vin#branch[40])
+
+echo Zin = $&Zinr + $&Zini j
+
+let cost=({R1_value}+{R2_value}+{Rc_value}+{Re_value}+{Rout_value}+{Rl_value})/1000+({Ci_value}+{Cb_value}+{Co_value})*1000000+0.2
+print cost
+
+let gain= abs(v(out)[40]/v(in2)[40])
+print gain
+let merit= gain*bandwidth/(cost*f1)
+print merit
+
+echo  "ac1_TAB"
+print gain
+print f1
+print f2
+print bandwidth
+echo  "ac1_END"
+
+echo  "zin_TAB"
+echo "Zin = $&Zinr + $&Zini j"
+echo "Zin - Amplitude = $&Zinamp "
+echo  "zin_END"
+
+echo  "merit_TAB"
+print cost
+print gain
+print f1
+print bandwidth
+print merit
+echo  "merit_END"
+
+quit
+.endc 
+.end
+

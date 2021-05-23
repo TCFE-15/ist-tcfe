@@ -1,0 +1,17 @@
+\newpage
+\section{Introduction}
+\label{sec:introduction}
+
+For this laboratory assignment, our objective was to create an audio amplifier circuit that would receive an audio input with an amplitude of 10mV and would connect to an 8 Ohm speaker. This amplifier was made of Bipolar Junction Transistors, specifically Philips models: BC557A (PNP) and BC547A (NPN), and was composed of two different stages, being the first one a Gain stage, with the purpose of having the maximum gain possible, being this a crucial step because a good voltage amplifier has to have a high gain due to the fact that we want to amplify the sound. The second one was an Output stage, which allowed us to lower the impedance of the Amplifier to achieve a better connection to the Load. In this second stage, a PNP transistor was used. Also, as we will present further through this report, a merit classification system was created to determine and ensure the quality of the audio amplifier.
+
+In this report, it will be presented a theoretical analysis, in Section \ref{sec:analysis}, where we used Operating Point (DC) to obtain important values for the then applied incremental analysis (AC), as studied in the theoretical classes, in order to predict the gain and the input and output impedances for each of the stages mentioned above, followed by a software simulation analysis, in the Section \ref{sec:simulation}, made by a computational simulation tool: \textit{Ngspice}. To sum up the report, the conclusions of this study are presented in Section \ref{sec:conclusion}, where the simulation results obtained in Section \ref{sec:simulation}, are compared to the theoretical results obtained in Section \ref{sec:analysis}.
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{t4Circuit}
+	\caption{Circuit that will be analysed in this lab.}
+	\label{fig:circuit}
+\end{figure}
+\FloatBarrier
+\newpage
+

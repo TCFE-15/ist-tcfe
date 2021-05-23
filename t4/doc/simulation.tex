@@ -1,0 +1,157 @@
+\section{Simulation Analysis}
+\label{sec:simulation}
+In this section we used the NGSpice script provided and added the needed alterations.
+
+\vspace{0.5cm}
+\textbf{Coupling Capacitors}\footnote{These topics were already explained in class, therefore we will only make a small summary of what was already approached in class.}
+
+
+First off, we must understand the importance of the coupling capacitors. Two examples of these are the capacitors $Ci$ and $Co$. As explained in class, these capacitors will be important to decrease the lower cut-off frequency of the circuit, while maintaining the higher cut-off frequency, therefore increasing the bandwidth. This because if it's impedance is $\frac{1}{2\pi f C j}$, if we decrease the frequency, the impedance will increase, tending to an open circuit. To avoid this and allow the circuit to pass more frequencies, we can increase the C value to compensate the decrease of frequency. Therefore we increased the value of Co from 1$\mu$F to 0.8mF. 
+
+\vspace{0.5cm}
+\textbf{Bypass Capacitor}
+
+
+The bypass capacitor of this circuit was $Cb$. This capacitor has the main function of increasing the gain, because when in parallel with $Re$, it will act like a short-circuit for higher frequencies (Z$\rightarrow$0), making v(emit)=0. And if we analyze Figure \ref{fig:GainStage} we see that the output voltage of the Gain Stage will increase by decreasing v(emit). So the gain of the Gain Stage will be higher, which will eventually lead to a bigger gain of the total circuit for medium and high frequencies. Also, with higher values of C, we will have lower impedances, so we will need lower frequencies to have a short circuit approximation in place of the capacitor.  For this, we changed the $Cb$ value from 1mF to 2.5mF.
+
+\vspace{0.5cm}
+\textbf{Rc importance}
+
+Finally, as seen in the theoretical analyses, during the gain stage, the resistor $Rc$ will also have an influence on the gain. However this influence is not linear. So for this circuit we actually found that values smaller than the original one (1k$\Omega$) gave us better merit results, despite slightly decreasing our gain value, because it also increased the higher cut-off frequency, and lower values also gave us lower output impedances, which we will see later why that was preferable. We ended up choosing a value of 700$\Omega$.
+
+With this, we printed Table \ref{tab:ngspice2} with all the values we used.
+
+\FloatBarrier
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline    
+		{\bf Component} & {\bf Value ([$\Omega$] or [F])} \\ \hline
+		\input{../sim/values_tab}		
+	\end{tabular}
+	\caption{Circuit Component's values}
+	\label{tab:ngspice1}
+\end{table}
+\FloatBarrier
+
+After that we ran an Operating Point (OP) Analyses, and will later compare the theoretical and simulated results.
+
+\FloatBarrier
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline    
+		{\bf Name} & {\bf Value [A] or [V]} \\ \hline
+		\input{../sim/op2_tab}		
+	\end{tabular}
+	\caption{OP analyses.}
+	\label{tab:ngspice2}
+\end{table}
+\FloatBarrier
+
+While we were still under the OP analyses section we verified if the transistors were acting in the Forward Active Region (F.A.R.). For this the NPN transistor (Q1) must obey the following equation:
+\begin{equation}
+	V_{CE} > V_{BE} \Leftrightarrow \text{v(coll)-v(emit)}> \text{v(base)-v(emit)}
+	\label{eq:sim1}
+\end{equation}
+ The following table shows those values.
+
+\FloatBarrier
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline    
+		{\bf Voltage} & {\bf Value [V]} \\ \hline
+		\input{../sim/farq1_tab}		
+	\end{tabular}
+	\caption{F.A.R. analyses - NPN transistor}
+	\label{tab:ngspice3}
+\end{table}
+\FloatBarrier
+Equation \ref{eq:sim1} is validated, so the transistor in the gain part of the circuit is in F.A.R.
+For the PNP transistor, the equation that tells us if the component is in F.A.R is:
+\begin{equation}
+	V_{EC} > V_{EB} \Leftrightarrow \text{v(emit2)}> \text{v(emit2)-v(coll)}
+	\label{eq:sim2}
+\end{equation}
+The table that will give us the values to verify the equation is the following:
+
+\FloatBarrier
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline    
+		{\bf Voltage} & {\bf Value [V]} \\ \hline
+		\input{../sim/farq2_tab}		
+	\end{tabular}
+	\caption{F.A.R. analyses - PNP transistor}
+	\label{tab:ngspice4}
+\end{table}
+\FloatBarrier
+
+Once again, equation \ref{eq:sim2} is followed, so we can move on with our analyses because both transistors are acting in the forward active region.
+
+After the OP analyses, given that there wasn't much interest in doing a transient analyses, once that the objective was to make an audio amplifier, we moved on to a frequency analyses. 
+Starting of with the circuit's gain: $\frac{v_o(f)}{v_i(f)}$, we plotted the following graph in dB, so that it would be easier to compare to the theoretical results later on.
+
+\FloatBarrier
+\begin{figure}[h] 
+	\centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.6\linewidth]{vgainf}
+	\caption{$v_o(f)/v_i(f)$ - Frequency Analysis}
+	\label{fig:venvelope}
+\end{figure}
+\FloatBarrier
+
+This gain is above zero, which means that the true gain value will actually be bellow zero because during the gain stage, the circuit acts as an inverting amp, which means that the signal will show a difference of 180 degrees in the phase, or basically the output signal will be symmetrical to the initial one. But the output stage acts like a non inverting amp, so the output signal will not change signal. Therefore the final output voltage will show a negative gain, but that won't matter in the hearing of the audio, what will be important is the absolute value. By analyzing the graph we see that in the pass-band area we have a gain of about 36 dB. That corresponds to a ratio of almost 65 in absolute value\footnote{$10^{\frac{36}{20}}= 63.096$}. The exact value will be shown in Table \ref{tab:ngspice5}, alongside the values of the bandwidth, lower and higher cut-off frequencies (in Hz).
+
+\FloatBarrier
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline    
+		{\bf Name} & {\bf Value} \\ \hline
+		\input{../sim/ac1_tab}		
+	\end{tabular}
+	\caption{Gain, lower and higher cut of frequencies and bandwidth}
+	\label{tab:ngspice5}
+\end{table}
+\FloatBarrier
+
+Finally we calculated the input and output impedance, both shown in the following table.
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\subfloat[Input Impedance]{\begin{tabular}{|c|c|}
+			\hline    
+			{\bf Input Impedance} & {\bf Value [$\Omega$]} \\ \hline
+			\input{../sim/zin_tab}	
+	\end{tabular}}	
+	\qquad
+	\subfloat[Output Impedance]{\begin{tabular}{|c|c|}
+			\hline    
+			{\bf Output Impedance} & {\bf Value [$\Omega$]} \\ \hline
+			\input{../sim/zout_tab}
+	\end{tabular}}	
+	\caption{Input and Output Impedance}
+	\label{tab:sim6}
+\end{table}
+\FloatBarrier 
+
+It would be ideal for the input impedance to have a very big value, much greater than the value of $Rs=100\Omega$, as explained in the Theoretical Analysis. The obtained value of about 850$\Omega$ isn't that ideal, as it is only about 8.5 times bigger. But we weren't able to find better results without compromising the merit, so we decided to keep this impedance result.
+
+Also the output impedance isn't much lower than 8$\Omega$, which is not ideal. It would be better for the output impedance to be much smaller than 8$\Omega$ so that the major part of the signal wouldn't be lost. However we weren't able to achieve better values until the date of the assignment, so we accepted these values and focused on the merit. For this we also calculated the necessary values and obtained the following table. This will be better discussed in the conclusion.
+
+\FloatBarrier
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline    
+		  & {\bf Value} \\ \hline
+		\input{../sim/merit_tab}		
+	\end{tabular}
+	\caption{Merit.}
+	\label{tab:ngspice7}
+\end{table}
+\FloatBarrier
