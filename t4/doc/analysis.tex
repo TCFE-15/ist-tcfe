@@ -1,0 +1,303 @@
+\section{Theoretical Analysis}
+\label{sec:analysis}
+In this section, we aim to describe the behaviour of the Audio Amplifier circuit, presented in Figure \ref{fig:circuit}, using the concepts we learned in the theoretical lectures. First, we shall note that this circuit is divided in two different stages, each one with its specific purpose: the Gain Stage and the Output Stage. Therefore, it is important to analyze each stage separately, by applying both Operating Point and Incremental Analyses, before focusing on a more generic analysis of the complete circuit. This process will allow us to determine a series of parameters, such as the Voltage Gain, the Bandwidth and the Input and Output Impedances, which define whether the Amplifier has a good performance or not. That is why some of these parameters were chosen to contribute to our figure of merit.
+
+We will finish this section by studying the frequency response of the amplifier circuit, in particular how the voltage gain relates with the frequency of the input signal.
+
+\subsection{Gain Stage}
+
+We will, now, start our analysis by the first stage of the circuit: the Gain Stage. This stage is implemented with the single purpose of achieving the highest gain possible, thus composing the amplifying part that gives the circuit its name. This part of the circuit relies on a common emitter configuration, using an NPN type transistor, in order to accomplish the referred goal, as it is shown in Figure \ref{fig:GainStage}, which is characterized by having a high Input Impedance, which is a desirable feature, as it will not degrade the input signal too much, but also a high Output Impedance, which is prejudicial, because, as will explain further, it will consume the gain if directly connected to the 8 $\Omega$ Load Resistor.
+
+\FloatBarrier
+\begin{figure}[h] 
+	\centering
+	\includegraphics[scale=0.8, clip, width=0.6\linewidth]{t4GainStage}
+	\caption{Gain Stage}
+	\label{fig:GainStage}
+\end{figure}
+\FloatBarrier
+
+\subsubsection{Operating Point Analysis}
+We will begin the study of the Gain Stage by submitting it to the Operating Point Analysis. We find, as we start, a problem: we can't connect the signal voltage source directly to the base of the NPN transistor. This is due to the fact that the small source signal has a DC component of 0 V (which is typical in this kind of circuits), a value that is insufficient to guarantee that the transistor operates in the Forward Active Region (F.A.R), as it is recommended (and required). The solution for this issue is to implement a Coupling Capacitor and a Bias Circuit.
+The Coupling Capacitor, placed between the internal resistance of the source, $R_{in}$, and the base of the transistor, acts as a DC block, filtering the DC component of the source signal and ensuring that only the AC component (the one which contains relevant information) flows through. However, the Coupling Capacitor also filters signals with low frequencies. That's why amplifier devices tend to struggle with small frequency signals. It is also important to refer that we should choose a high Coupling Capacitance (in the order of the mF), enough to guarantee a stable gain in the human audible range of frequencies. A low Coupling Capacitance (in the order of the $\mu$F) would correspond to a too high Lower Cut-Off Frequency, leading to a smaller bandwidth and stealing audible frequencies to the operating range of the amplifier, which is undesirable.
+On the other side, the Bias Circuit is composed by two resistors, $R_{B1}$ and $R_{B2}$, and a supply DC voltage source, $V_{CC}$. Each resistor is connected to $V_{CC}$ and to the base of the transistor, as the Figure \ref{fig:GainStage} shows. This implementation imposes a proper DC voltage to the base of transistor, thus ensuring that the Base-Emitter Junction (BEJ) is on, this is, the transistor is operating in the F.A.R, as intended.
+We are, now, able to run the Operating Point Analysis.
+First, we note that, as the Coupling Capacitor behaves as an open circuit from the DC point of view (because it filtrates low frequency signals, in particular, DC signals, whose frequency is 0 Hz), the DC source voltage, $V_S$, the internal resistance, $R_{in}$, and the Coupling Capacitance are excluded from the OP analysis. Then, to simplify the analysis, we computed the Thévenin's equivalent of the Bias Circuit, as seen from the base of the transistor. The equivalent resistance ($R_B$) and voltage ($V_{eq}$) are given by the following equations:
+\begin{equation}
+	R_B = R_{B1} || R_{B2} = \frac{R_{B1} R_{B2}}{R_{B1} + R_{B2}}
+	\label{eq:RTh}
+\end{equation}
+
+\begin{equation}
+	V_{eq} = \frac{R_{B2}}{R_{B1} + R_{B2}} V_{CC}
+	\label{eq:VTh}
+\end{equation}
+
+By applying Kirchhoff Voltage Law (KVL) to the Bias mesh, we can compute the base current, $I_B$, having in mind that the emitter current $I_E$ is given by $I_E = (1 + \beta_F)I_B$ and that the Base-Emitter Voltage, $V_{BEON}$, is approximately 0.7 V:
+
+\begin{equation}
+	I_B = \frac{V_{eq} - V_{BEON}}{R_B + (1 + \beta_F)R_E}
+	\label{eq:IbGain}
+\end{equation}
+
+Then, the colector current, $I_C$, is simply given by:
+\begin{equation}
+	I_C = \beta_FI_B
+	\label{eq:IcGain}
+\end{equation}
+
+Applying KVL on the right side mesh allows us to determine the Static Output Voltage of the Gain Stage:
+\begin{equation}
+	V_O = V_{CC} -R_CI_C = 7.9058 V
+	\label{eq:VoGain}
+\end{equation}
+
+We also need to be sure that this stage is operating in the F.A.R. This happens when the Collector-Emitter Voltage, $V_{CE}$, is higher than $V_{BEON}$. $V_{CE}$ is given by:
+
+\begin{equation}
+	V_{CE} = V_O - V_E = V_O - R_E (1 + \beta_F)I_B =  6.7295 V > V_{BEON}
+\end{equation}
+
+This confirms that this part of the circuit operates in the F.A.R, and, with this statement, we conclude the OP Analysis of the Gain Stage.
+
+It is also relevant to refer that this stage corresponds to an Inverting Amplifier, because the output signal suffers a phase variation of $\pi$ radians relatively to the input signal, which means that the output signal is inverted face to the input signal. This is not a problem, though, because the human ear can distinguish if a signal is inverted or not.
+
+
+\subsubsection{Incremental Analysis (Medium Frequencies)}
+
+We shall, now, proceed to the Incremental Analysis of the Gain Stage. We note that this analysis is valid for medium frequencies, because the capacitors behave as short-circuits in this range of frequencies.
+First, we need to replace the transistor with its incremental model. Each resistor keeps connected to the same nodes: $R_{in}$ is connected to the incremental voltage source,$v_i$, $R_B$ is placed between $R_{in}$ and the base, $R_E$ between the emitter and the ground and $R_C$ between the collector and the ground. We note that $V_{CC}$ is not considered in this analysis, because it does not have any AC component. On the other hand, $v_i$ and $R_{in}$ are now considered, because the Coupling Capacitor does not filtrate the AC component of the circuit; moreover, in this analysis, it behaves as a shot-circuit, as it was mentioned earlier.
+To simplify the analysis, we determined the Thévenin's equivalent for $v_i$, $R_{in}$ and $R_B$:
+%% Perguntar qual a diferença entre $v_i$ e $v_s$.
+\begin{equation}
+	R_{eq} = R_B || R_{in} = \frac{R_B R_{in}}{R_B + R_{in}}
+	\label{eq:ReqGainInc}
+\end{equation}
+
+\begin{equation}
+	V_{eq} = \frac{R_B}{R_B + R_{in}} v_i
+	\label{eq:VeqGainInc}
+\end{equation}
+
+We also computed the incremental parameters of the transistor:
+\begin{equation}
+	g_m = \frac{I_C}{V_T}
+	\label{eq:gmGain}
+\end{equation}
+
+\begin{equation}
+	r_{\pi} = \frac{\beta_F}{g_m}
+	\label{rpiGain}
+\end{equation}
+
+\begin{equation}
+	r_o \approx \frac{V_A}{I_C}
+	\label{eq:roGain}
+\end{equation}
+
+, where $V_T$ is the thermal voltage, $V_A$ is the Early voltage, $\beta_F$ is the forward common emitter current gain, $g_m$ is the transconductance, $r_{\pi}$ is the transitor's input (incremental) impedance and $r_o$ is the transitor's output (incremental) impedance.
+
+We now have all it is needed to determine the Voltage Gain, as well as the Input and the Output Impedances of the Gain Stage, which are all incremental parameters.
+The Voltage Gain, as it was deducted in the theoretical classes, is given by:
+\begin{equation}
+	\frac{v_o}{v_i} = \frac{R_B}{R_b + R_{in}} R_C \frac{R_E - g_mr_{\pi}r_o}{(r_o + R_C + R_E)((R_B||R_{in}) + r_{\pi} + R_E) + g_mR_Er_or_{\pi} - R_{E}^2} = -3.3704
+	\label{eq:GainGStage}
+\end{equation}
+
+This value is negative, which confirms the gain Stage acts as an Inverting Amplifier.
+However, the Voltage Gain obtained is kind of unsatisfactory. One explanation for the low gain is the presence of $R_E$, whose function is to stabilize the effect of the temperature variation in the circuit, but with the disadvantage of lowering the Gain. One solution for this problem is to implement a Bypass Capacitor between the emitter and the ground (in parallel with $R_E$). This capacitor behaves as an open-circuit for low frequencies, and as a short-circuit for medium frequencies. In the low frequency range, in particular, for DC values ($f$ = 0 Hz), the stabilization of the temperature effect provided by $R_E$ is quite important, so, for this case, the current must flow through $R_E$, which is compatible with the Bypass Capacitor acting as an open-circuit (it is like the capacitor is not even there). But, in the case of medium frequencies, the Gain becomes more relevant; so, the Bypass Capacitor, working as a short-circuit, allows to effectively pass over (bypass) the resistor $R_E$, avoiding the prejudicial effect of $R_E$ in the Gain and, thus, maximizing it. 
+Therefore, the insertion of this component in the circuit guarantees the stability of the OP and, consequently, of the incremental parameters, such as $g_m$.
+The Voltage Gain in the Gain Stage, after the implementation of the Bypass Capacitor, is equivalent to set $R_E = 0 \Omega$, and is given by:
+\begin{equation}
+	R_E = 0 \Rightarrow \frac{v_o}{v_i} = -g_m(R_C||r_o)v_{\pi} = -g_m(R_C||r_o)\frac{r_{\pi}||R_{B1}||R_{B2}}{R_{in} + (r_{\pi}||R_{B1}||R_{B2})} v_s = -136.02
+	\label{eq:gainBypass}
+\end{equation} 
+
+, which is a higher (and better) value for the Gain. The next plots show the difference between the Gains obtained without ($R_E = 100 \Omega$) and with the implementation of the Bypass Capacitor ($R_E = 0 \Omega$), and their effect in the Output Voltage of the Gain Stage.
+
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{gainGStageOctave}
+	\caption{Voltage Gains Obtained with and without the Bypass Capacitor}
+	\label{fig:gainComp}
+\end{figure} 
+
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{voGStageOctave}
+	\caption{Output Voltages Obtained with and without the Bypass Capacitor}
+	\label{fig:voGSComp}
+\end{figure} 
+We note that, in the previous plot and from now on, we will consider a frequency of 1 kHz in the plots in function of time. 
+
+We will now discuss the effects of the Bypass Capacitance in the bandwidth. If the value chosen is too low (in the order of the $\mu$F), we will obtain a low gain in part of the desirable bandwidth, specially in the human audible rande, which is the relevant part. We would only have a high and stable gain for frequencies superior to 20 kHz, but those are out of the human audible range, so, the Audio Amplifier would not achieve its purpose. Therefore, we should choose a higher value for the Bypass Capacitance (in the order of the mF), for which we would obtain a high and stable gain in the desirable passband (20 Hz - 20kHz) and in even higher frequencies.
+
+We shall, now, compute the Input and the Output Impedances for the Gain Stage ($Z_I$ and $Z_O$, repectively). As we learned in the theoretical classes, these are given, for the case where the Bypass Capacitor is implemented, by:
+
+\begin{equation}
+	Z_I = R_{B1}||R_{B2}||r_{\pi} = 8383.0 \Omega
+	\label{inputImpGS}
+\end{equation}
+
+\begin{equation}
+	Z_O = R_C||r_o =  661.16 \Omega
+	\label{outputImpGS}
+\end{equation}
+
+We see that the Input Impedance is quite high ($R_{in} << Z_I$), which is a good result, meaning the input signal will not be too much degraded by it. Therefore, there's no problem in connecting the signal source to the amplifier.
+However, the Output Impedance is too high to be connected to a load resistor with 8 $\Omega$ (a typical value among these devices), because the greater part of the voltage would be retained by $Z_O$, thus degrading a lot the output voltage signal in the load. The high Gain achieved in the Gain Stage would be lost, and the amplifier device would be ineffective. Therefore, we need to add an Output Stage to the circuit, with a very low Output Impedance, so that the greater part of the Gain Stage Output Voltage would be secured by the Load Resistor, protecting the Gain previously obtained.
+
+\subsection{Output Stage}
+
+We will now analyze the Output Stage, whose purpose was already discussed in the previous section. This part of the circuit uses, now, a PNP-type transistor, as required in the laboratory guide, and relies on a common collector configuration to achieve a very low Output Impedance, as presented in Figure \ref{fig:circuit}.
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.7\linewidth]{t4OutputStage}
+	\caption{Output stage.}
+	\label{fig:OutputStage}
+\end{figure}
+\FloatBarrier
+
+\subsubsection{Operating Point Analysis}
+
+We will start our analysis of the Output Stage by computing its Operating Point. First, we should note that the (common) collector of the transistor is now connected to the ground,and not to $V_{CC}$, as the current flows from the emitter to the collector (we are dealing with a PNP transistor, now). Besides, even though the signal continues to be applied at the base of the transistor, the Output Voltage is now computed on the emitter. We also refer that the Emitter-Base Voltage, $V_{EBON}$ is, approximately, 0.7 V, just as $V_{BEON}$ in the Gain Stage. The input voltage, $V_I$ in this stage is the output voltage of the Gain Stage.
+With that in mind, by applying KVL to the outer loop, we can determine the emitter current, $I_E$:
+\begin{equation}
+	I_E = \frac{V_{CC} - V_{EBON} - V_I}{R_E}
+	\label{eq:IeOS}
+\end{equation}
+The currents at the collector and at the base are then computed, using the following equations:
+\begin{equation}
+	I_E = I_B + I_C
+	\label{eq:IeSum}
+\end{equation}
+
+\begin{equation}
+	I_E = (1 + \beta_F) I_B
+	\label{eq:IeBf}
+\end{equation}
+
+We can, now, determine the Static Output Voltage on this Stage, by applying KVL to the right side mesh:
+
+\begin{equation}
+	V_O = V_{CC} - R_E I_E = 8.6058V
+	\label{eq:VoOS1}
+\end{equation}
+
+Alternatively, we can use a rather convenient formula, by applying KVL to the left side mesh:
+\begin{equation}
+	V_O = V_I + V_{EBON} = 8.6058 V
+	\label{eq:VoOS2}
+\end{equation}
+
+
+We note that, in this stage, the emitter current is much stronger than in the Gain Stage. This is a good achievement, as part of this current will feed the Load. However, it is important to note that a very high current leads to an also high dissipated power, making this stage quite inefficient in terms of energy. This is a common problem among Class A Amplifiers, like the one we are studying.
+
+We can also predict that the Voltage Gain will be approximately unitary, as $V_E = V_O \approx V_B + 0.7 = V_I + 0.7$. The input and output voltages have the same AC amplitude, differing in a DC offset of 0.7 V, which translates in an unitary gain. In fact, the purpose of this stage is just supplying current to the load, or achieving a very low Output Impedance. The high Gain resposible for amplifying the signal was already obtained in the Gain Stage.
+
+\subsubsection{Incremental Analysis}
+
+We will now run the Incremental Analysis in the Output Stage. The process is, in all, similar to the one applied in the Gain Stage. First, we replace the PNP transistor with its incremental model, and connect each resistor to the respective nodes, having in mind that $V_{CC}$ is not considered. The parameters $g_m$, $r_{\pi}$ and $r_o$ are computed in the same way as in the Gain Stage. However, at this point, it is easier to work with their respective admitances: $g_{\pi} = \frac{1}{r_{\pi}}$, $g_{E} = \frac{1}{R_E}$ and $g_{o} = \frac{1}{r_o}$. After applying Kirchhoff Current Law (KCL), we reach this formula for the Output Stage Voltage Gain:
+\begin{equation}
+\frac{v_o}{v_i} = \frac{g_m}{g_{\pi} + g_E + g_o + g_m} = 0.98768
+\label{eq:gainOS}
+\end{equation} 
+
+The obtained value for the Gain in this stage is almost unitary, as predicted in the previous subsection.
+
+As we learned from the theoretical classes, the Input and the Output Impedances ($Z_I$ and $Z_O$, respectively) for this stage are given by:
+\begin{equation}
+Z_I = \frac{g_{\pi} + g_E + g_o + g_m}{g_{\pi} (g_{\pi} + g_E + g_o)} = 8192.1 \Omega
+\label{eq:InputImpOS}
+\end{equation}
+
+\begin{equation}
+Z_O = \frac{1}{g_{\pi} + g_E + g_o + g_m} = 0.43841 \Omega
+\label{eq:OutputImpOS}
+\end{equation}
+
+Having in mind that $Z_I$ must be far greater than the Output Impedance of the gain Stage, so the signal doesn't get degraded, we considered that the value we obtained for it was acceptable. On the other hand, the determined value for $Z_O$ is very low, when compared with the 8 $\Omega$ Load Resistance. Therefore, the signal that reaches the load will not suffer a significant degradation, which means the Output Stage is fulfilling its purpose, and that we can connect the Output Stage to the Load Resistor without concern.
+
+The next plot compares the Output Stage input voltage with its Output Voltage.
+
+Finally, we note that we need to add another Coupling Capacitor between the emitter and the Load Resistor, in order to filter the DC component of the Output Signal, so that it doesn't affect the performance of whatever circuit we would want to connect to the Load Resistor. Also, the Output Stage consists on a Non-Inverting Amplifier, as the phase of the Output Voltage remains the same as the Input Voltage's.
+
+The next plot compares the Output Stage input voltage with its Output Voltage (in terms of the AC component, because the DC component will be filtrated by the Coupling Capacitor). It is quite visible that the gain is almost unitary.
+
+\FloatBarrier
+\begin{figure}[ht] \centering
+\includegraphics[width=0.8\linewidth]{vivoOStageOctave}
+\caption{Input Voltage vs Output Voltage (AC Component)}
+\label{fig:vivoOS}
+\end{figure} 
+\FloatBarrier
+
+\subsection{Complete Circuit Analysis}
+
+Now that we analysed each part of the circuit separately, we will now present the equations for the gain and the Input and Output Impedances relative to the circuit as a whole. These formulae were obtained by replacing the circuit with its incremental model, in a medium frequency regime (the capacitors act as short-circuits). We will use the index 1 for parameters in the Gain Stage, and the index 2 for parameters relative to the Output Stage.
+The Voltage Gain of the entire circuit is given by:
+\begin{equation}
+\frac{v_o}{v_i} = \frac{\frac{1}{r_{\pi2} + Z_{O1}} + \frac{g_{m2} r_{\pi2}}{r_{\pi2} + Z_{O1}}}{\frac{1}{r_{\pi2} + Z_{O1}} + \frac{1}{R_{E2}} + \frac{1}{r_{o2}} + \frac{g_{m2} r_{\pi2}}{r_{\pi2} + Z_{O1}}} A_{v1} = -128.24
+\label{eq:gainTotal}
+\end{equation}
+
+The Input Impedance for the whole circuit is the same as for the Gain Stage:
+\begin{equation}
+Z_I = Z_{I1} = 729.02 \Omega
+\label{eq:InputImpTotal}
+\end{equation}
+
+The Output Impedance for the complete circuit is determined by:
+\begin{equation}
+Z_O = \frac{1}{g_{o2} + g_{m2} \frac{r_{\pi2}}{r_{\pi2} + Z_{O1}} + g_{E2} + \frac{1}{r_{\pi2} + Z_{O1}}} = 3.1470 \Omega
+\label{eq:OutputImpTotal}
+\end{equation}
+This confirms that the circuit has a high Input Impedance and an acceptably low Output Impedance, as intended.
+The Output Voltage of the circuit is compared to the one inputted by the source signal in the next plot (once more, just in terms of the AC component).
+
+\FloatBarrier
+\begin{figure}[h] \centering
+\includegraphics[width=0.8\linewidth]{vsvoTotal}
+\caption{Input Signal Voltage vs Output Voltage (AC Component)}
+\label{fig:vsvoTotal}
+\end{figure}
+\FloatBarrier
+
+\subsection{Frequency Response Analysis}
+
+The final part of the Theoretical Analysis of the Audio Amplifier circuit consists in the study of its frequency response, in particular, how the frequency affects the value of the Gain. In the previous subsections, the computed gain was constant, as it depended on the values of resistances and conductances. However, as it was referred in those subsections, this approximation was only valid for medium frequencies. In this section, we will analyze the behaviour of the circuit when operating with other frequency values, in particular with low frequencies.
+For that, we need to determine the Lower Cut-Off Frequency, which constitutes a flag for the edge between the constant gain passband and the low frequency band. The Lower Cut-Off Frequency is defined as the frequency for which the gain is inferior to the stable gain in 3 dB. This value can be calculated using the Time Constants Method. To apply this method, we need to determine, for each capacitor used, the Thévenin's equivalent resistance as seen by the capacitor's terminals when all the other capacitors are replaced with short-circuits.
+The equivalent resistance as seen by the Coupling Capacitor ($C_i$)in the Gain Stage ($R_{eq1}$) corresponds to the series of $R_{in}$ and $Z_I$ (Input Impedance for the whole circuit):
+\begin{equation}
+R_{eq1} = R_{in} + Z_I = 829.02
+\label{eq:Req1}
+\end{equation}
+
+The equivalent resistance as seen by the Coupling Capacitor ($C_o$) in the Output Stage ($R_{eq2}$) corresponds to the series of the Load Resistor $R_L$ and $Z_O$ (Output Impedance for the whole circuit):
+\begin{equation}
+R_{eq2} = R_L + Z_O = 11.147 \Omega
+\label{eq:Req2}
+\end{equation}
+
+In order to compute the equivalent resistance as seen by the Bypass Capacitor ($C_b$), we applied the Mesh Method to the incremental model of the Gain Stage. We replaced the Bypass Capacitor with a predefined voltage source; then, we computed the current flowing through this source. The equivalent resistance corresponds to the quotient between the predefined voltage and the computed current: $R_{eq3} = 4.6993 \Omega$.
+
+Having calculated all the equivalent resistances, and according to the Time Constants Method, the Lower Radian Cut-Off Frequency is given by:
+\begin{equation}
+\omega_L = \frac{1}{R_{eq1} C_i} + \frac{1}{R_{eq2} C_o} + \frac{1}{R_{eq3} C_b} = 209.32 rad/s
+\label{eq:omegaL}
+\end{equation}
+
+The Lower Cut-Off Frequency is, then, given by:
+\begin{equation}
+f_L = \frac{\omega_L}{2 \pi} = 33.314 Hz
+\label{eq:freqL}
+\end{equation}
+
+In order to present the plot for the frequency response of the Complete Circuit, we made a linear approximation for the low frequency region. We should note, first, that, for a null frequency (corresponding to DC values), the Voltage Gain will also be null, because, in this case, all the voltage would be filtered by the Coupling Capacitors. With that in mind, we approximate the low frequency region by a linear function defined by the origin of the referential and the point corresponding to the Lower Cut-Off Frequency (whose Gain is inferior to the Stable Gain in 3 dB). The point of the linear function whose gain would be equal to the Stable Gain determines, then, the beginning of the Stable Gain passband. For simplicity, we considered the Higher Cut-Off Frequency to be infinite; thus, in this approximation, the passband remains constant after the beginning of the passband. 
+
+The next plot shows the results we obtained for the frequency response.
+
+\begin{figure}[h] \centering
+\includegraphics[width=0.8\linewidth]{octave}
+\caption{Frequency Response of the Complete Circuit}
+\label{fig:freqResp}
+\end{figure}

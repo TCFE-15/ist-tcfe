@@ -1,0 +1,83 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+To start this conclusion we will compare all the results we obtained in NGSpice and in Octave side by side. 
+
+Starting of with the Operating Point analyses:
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\subfloat[Theoretical]{\begin{tabular}{|c|c|}
+			\hline    
+			{\bf Name} & {\bf Value [A] or [V]}\\ \hline
+			\input{../mat/oct1_tab}	
+	\end{tabular}}	
+	\qquad
+	\subfloat[Simulated]{\begin{tabular}{|c|c|}
+			\hline    
+			{\bf Name} & {\bf Value [A] or [V]}\\ \hline
+			\input{../sim/op2_tab}
+	\end{tabular}}	
+	\caption{Operating Point Analysis}
+	\label{tab:conc1}
+\end{table}
+\FloatBarrier 
+
+These values show some differences, but those discrepancies are small enough, and we can associate them to the fact that NGSpice uses much more complex models than the one we used, given that we simplified many components of the circuit and used a model that approximates the real circuit. But still the values are quite close, so the model used in the theoretical analysis, in what concerns to the operating point, is a good approximation of the real circuit.
+
+\FloatBarrier
+\begin{figure}[ht]
+	\centering
+	\subfloat[Octave]{\includegraphics[ width=0.45\linewidth]{octave}}
+	\qquad
+	\subfloat[NGSpice]{\includegraphics[trim=0 60 0 200, clip, width=0.45\linewidth]{vgainf}}
+	\caption{Frequency analysis - $v_o(f)/v_i(f)$}
+	\label{fig:conc2}
+\end{figure}
+\FloatBarrier
+
+It's worth noticing that the theoretical Gain Value was an absolute value of $128.24$, whilst the simulated value was of $65.3367$. These values are quite different, and this can be explained by the previous explanation of the use of different models. But this big error is also associated to resistances $r_\pi$ and $R_C$. While we used constant values for all parameters for the theoretical analyses, the truth is these values change according to the frequency, and NGSpice's parameters take that into account, because NGSpice considers capacitors and inductors in the transistor model. The simplification of the theoretical model could have also led to getting a higher gain value in the theoretical analysis.
+
+Also an obvious approximation we made was considering the gain behavior to be linear in the theoretical analysis for low frequencies, which isn't exactly true. Also the fact that we assumed the higher cut-off frequency to be $\infty $ is obviously not true, as we can see in the simulated plot.
+
+After this, let's compare the values of the Input and Output Impedances of the complete circuit:
+
+\FloatBarrier
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline    
+		& {\bf Value [$\Omega$]} \\ \hline
+		\input{../mat/oct2_tab}		
+	\end{tabular}
+	\caption{Input and Output Impendances - Theoretical}
+	\label{tab:conc2}
+\end{table}
+\FloatBarrier
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\subfloat[Input Impedance]{\begin{tabular}{|c|c|}
+			\hline    
+			{\bf Input Impedance} & {\bf Value [$\Omega$]} \\ \hline
+			\input{../sim/zin_tab}	
+	\end{tabular}}	
+	\qquad
+	\subfloat[Output Impedance]{\begin{tabular}{|c|c|}
+			\hline    
+			{\bf Output Impedance} & {\bf Value [$\Omega$]} \\ \hline
+			\input{../sim/zout_tab}
+	\end{tabular}}	
+	\caption{Input and Output Impedance - Simulated}
+	\label{tab:conc3}
+\end{table}
+\FloatBarrier
+
+These values are also quite different. As explained before, the used models were also different, which might have led to the discrepant results. 
+
+Finally, as we saw in Table \ref{tab:ngspice7}, our final merit value was $M=2177.485$ which came from a compromise between trying to get good gain and bandwidth values and a low cost.
+
+
+

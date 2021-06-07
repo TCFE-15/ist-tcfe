@@ -1,0 +1,83 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+To start this conclusion, we will compare all the results we obtained in NGSpice and in Octave side by side. 
+
+First off, we compare the plotted graphs of the frequency response (gain and phase).
+
+\FloatBarrier
+\begin{figure}[ht]
+	\centering
+	\subfloat[Octave]{\includegraphics[ width=0.45\linewidth]{Tdb}}
+	\qquad
+	\subfloat[NGSpice]{\includegraphics[trim=0 60 0 200, clip, width=0.45\linewidth]{vo1f}}
+	\caption{Frequency Gain analysis - $v_o(f)/v_i(f)$}
+	\label{fig:conc2}
+\end{figure}
+\FloatBarrier
+
+Both plots are very similar for smaller frequencies and even show approximately the same gain value for the central frequency, which is the value we are most interested in. The theoretical value for gain was 42.54 dB while the simulated value was 42.43 dB, so these values were quite close, and we can conclude that the theoretical model used to calculate the absolute gain for the central frequency is corroborated by the NGSpice model.
+
+\FloatBarrier
+\begin{figure}[ht]
+	\centering
+	\subfloat[Octave]{\includegraphics[ width=0.45\linewidth]{Tp}}
+	\qquad
+	\subfloat[NGSpice]{\includegraphics[trim=0 60 0 200, clip, width=0.45\linewidth]{vo1phase}}
+	\caption{Frequency Phase analysis - $v_o(f)/v_i(f)$}
+	\label{fig:conc3}
+\end{figure}
+\FloatBarrier
+
+Once again it's noticeable the sudden discontinuity of the NGSpice phase graph but as explained earlier, this is only because NGSpice will only show phase values between [-180;180] Degrees; while doing the theoretical analyses, we didn't have to take that into consideration. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In addition to this, as explained in Sections \ref{sec:analysis} and \ref{sec:simulation}, while in the theoretical analysis, the Transfer Function had two poles, in the NGSpice model there were two extra capacitors to define the OPAMP, which led to the addition of two more poles, leaving the Transfer Function with 4 poles in the simulated analysis. As each pole adds a shift of -45 degrees per decade, that corresponds to a total slope of -180 degrees per decade, leaving the phase stable at -90-180 = $-270^o$ (which is the same as +90 degrees if measured in the opposite direction), instead of the original -90 obtained in the theoretical analysis, and therefore the plot graphs differ.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+After this, let's compare the values of the Input and Output Impedances of the complete circuit:
+
+\FloatBarrier
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline    
+		& {\bf Value [$\Omega$]} \\ \hline
+		\input{../mat/oct2_tab}		
+	\end{tabular}
+	\caption{Input and Output Impendances - Theoretical}
+	\label{tab:conc2}
+\end{table}
+\FloatBarrier
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\subfloat[Input Impedance]{\begin{tabular}{|c|c|}
+			\hline    
+			{\bf Input Impedance} & {\bf Value [$\Omega$]} \\ \hline
+			\input{../sim/zin_tab}	
+	\end{tabular}}	
+	\qquad
+	\subfloat[Output Impedance]{\begin{tabular}{|c|c|}
+			\hline    
+			{\bf Output Impedance} & {\bf Value [$\Omega$]} \\ \hline
+			\input{../sim/zout_tab}
+	\end{tabular}}	
+	\caption{Input and Output Impedance - Simulated}
+	\label{tab:conc3}
+\end{table}
+\FloatBarrier
+
+These values are also quite similar, so once again we can conclude that the theoretical and simulated models are close to equivalent. 
+
+Any discrepancies between the theoretical and the simulated values may be explained by the fact that each resistor and capacitor has an associated tolerance, as well as the OPAMP has non-idealities that were not considered in the theoretical analysis.
+
+Finally, as we saw in Table \ref{tab:ngspice7}, our final merit value was $M=2.4875\cdot10^{-6}$. Even though we got a perfect central frequency, we still got a relatively high deviation for the gain, but the most important factor was the high cost of the components used, specially the resistors that were used to define the OPAMP model. The resistances with a high value made up for a very high fraction of the total cost, having led to its high value, that otherwise would have been in the order of $10^{2}$. But considering the values and options we had, we still consider this to be a successful outcome as we were able to obtain values very close to desired.  
+
+With this laboratory assignment, we had the opportunity to interact with real components in a laboratory environment, as well as understanding better how an Operational Amplifier, a very important encapsulated circuit, behaves. 
+
+As we finish the last lab assignment, we reflect on what these projects taught us. Thanks to them, we understood better how the theoretical knowledge learned in the classes applied in practice. They were also very important, as they consisted on our first contact with many tools that are very useful for any engineer, such as NGSpice, Octave, LaTeX, GitHub and the operating system, Linux Ubuntu, itself.
+
+
+

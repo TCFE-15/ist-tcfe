@@ -45,45 +45,56 @@
 .model qx NPN(Is=800.0E-18 Bf=93.75)
 .ends
 
-
-
 .options savecurrents
 
-Vcc vcc 0 5.0
-Vee vee 0 -5.0
-Vin in 0 0 ac 1.0 sin(0 10m 1k)
+.param R1_value=1k
+.param R2_value=500
+.param R3_value=100k
+.param R4_value=500
+.param C1_value=220n
+.param C2_value=220n
 
-X1 0 inv_in vcc vee out uA741
+.csparam R1_value={R1_value}
+.csparam R2_value={R2_value}
+.csparam R3_value={R3_value}
+.csparam R4_value={R4_value}
+.csparam C1_value={C1_value}
+.csparam C2_value={C2_value}
 
-R1 in inv_in 1000
-R2 inv_in out 10000
+Vcc vcc 0 10.0
+Vee vee 0 -10.0
+*Vin 1 0 0 ac 0
+C1 0 in {C1_value}
+
+X1 in inv_in vcc vee out uA741
+
+R1 in 0 {R1_value}
+R4 inv_in 0 {R4_value}
+R3 out inv_in {R3_value}
 
 * load
-RL out 0 8
-
+R2 out vo {R2_value}
+C2 vo 0 {C2_value}
+Vout vo 0 0 ac 1.0 sin(0 10 1k)
 .op
 .end
 
 .control
 
-print all
-
-* time analysis
-tran 1e-5 1e-2
-plot v(out)
-hardcopy vo1.ps vdb(out)
-
-
 * frequency analysis
 ac dec 10 10 100MEG
-plot vdb(out)
-plot vp(out)
-hardcopy vo1f.ps vdb(out)
 
-*input impedance in kohm
-print v(in)[40]/R1[i]/1000
+print v(vo)
+let ZoutGainR= Re(-v(vo)[20]/(i(Vout)[20]))
+let ZoutGainI= Im(-v(vo)[20]/(i(Vout)[20]))
+let Zoutamp= abs(-v(vo)[20]/(i(Vout)[20]))
+ 
+echo  "zout_TAB"
+echo "Zout= $&ZoutGainR + $&ZoutGainI j"
+echo "Zout - Amplitude = $&Zoutamp "
+echo  "zout_END"
 
-*need a different setup to measure output impedance
-
+quit
 .endc 
+.end
 

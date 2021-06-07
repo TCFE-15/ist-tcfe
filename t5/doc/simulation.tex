@@ -1,0 +1,97 @@
+\section{Simulation Analysis}
+\label{sec:simulation}
+In this section we used the NGSpice script provided, specifically, we maintained the original OPAMP model, and altered the circuit to get the one presented in Figure \ref{fig:circuit}.
+
+The values we used are presented in Table \ref{tab:ngspice1}.
+
+\FloatBarrier
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline    
+		{\bf Component} & {\bf Value ([$\Omega$] or [F])} \\ \hline
+		\input{../sim/values_tab}		
+	\end{tabular}
+	\caption{Circuit Component's values}
+	\label{tab:ngspice1}
+\end{table}
+\FloatBarrier
+
+To get the resistance values of 500 $\Omega$ we used two resistors of 1k$\Omega$ in parallel, as it was already explained in Section \ref{sec:analysis}.
+
+Right away, we made an AC Analysis to study the circuit's behavior according to the frequency. 
+Starting of with the circuit's gain: $\frac{v_o(f)}{v_i(f)}$, we plotted the following graph in dB, so that it would be easier to compare with the theoretical results later on.
+
+\FloatBarrier
+\begin{figure}[h] 
+	\centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.7\linewidth]{vo1f}
+	\caption{$v_o(f)/v_i(f)$ Gain [dB] - Frequency Analysis}
+	\label{fig:vo1f}
+\end{figure}
+\FloatBarrier
+
+We can also see the phase correspondent to the Transfer Function of the circuit. 
+\FloatBarrier
+\begin{figure}[h] 
+	\centering
+	\includegraphics[trim=0 0 0 200, clip, width=0.7\linewidth]{vo1phase}
+	\caption{$v_o(f)/v_i(f)$ Phase [Deg] - Frequency Analysis}
+	\label{fig:vo1p}
+\end{figure}
+\FloatBarrier
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ Also, given that the NGSpice model of the OPAMP considered the existence of many components, specially two extra capacitors,  two poles will be added to the circuit's Transfer Function resulting in a total slope of -180 degrees per decade (for medium frequencies).
+ 
+ The abrupt change in the plot happens because NGSpice plots angles in an interval of [-180;180] Degrees.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+This circuit is obviously a Bandpass, and it's peak value is of about 40 dB (100 in linear value), for 1kHz which is exactly what we were looking for. The exact values of gain, central frequency, their deviations to the wanted values, and merit are presented in the Table \ref{tab:ngspice7}. The figure of merit value was calculated using the following equation:
+
+\begin{equation}
+	M=\frac{1}{cost(gaindev+fcdev+10^{-6})}
+\end{equation}
+
+\FloatBarrier
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline    
+		& {\bf Value} \\ \hline
+		\input{../sim/merit_tab}		
+	\end{tabular}
+	\caption{Merit.}
+	\label{tab:ngspice7}
+\end{table}
+\FloatBarrier
+
+As we can see the central frequency is exactly 1kHz, so we were quite successful on that aspect. On the other hand, the gain value is slightly above intended: we obtained a gain of 42.4 dB, so the signal will be amplified a little bit more than our objective. That affected the merit, which will be better discussed in section \ref{sec:conclusion}.
+ 
+Finally we calculated the input and output impedances, both shown in the following table.
+
+\FloatBarrier
+\begin{table}[h]
+	\centering
+	\subfloat[Input Impedance]{\begin{tabular}{|c|c|}
+			\hline    
+			{\bf Input Impedance} & {\bf Value [$\Omega$]} \\ \hline
+			\input{../sim/zin_tab}	
+	\end{tabular}}	
+	\qquad
+	\subfloat[Output Impedance]{\begin{tabular}{|c|c|}
+			\hline    
+			{\bf Output Impedance} & {\bf Value [$\Omega$]} \\ \hline
+			\input{../sim/zout_tab}
+	\end{tabular}}	
+	\caption{Input and Output Impedance}
+	\label{tab:sim6}
+\end{table}
+\FloatBarrier 
+
+The absolute value of the input impedance is quite high, above 1k$\Omega$, which will be necessary to amplify the received signal, without degrading it, and, thus, get a high gain value.
+
+However, for the output impedance we would want a much smaller absolute value. This would allow the circuit to connect to other systems without losing much of the signal. The value we obtained of 416.298$\;\Omega$ isn't ideal, but we weren't able to obtain better values without compromising the final merit, and overall these values of impedances are acceptable.
+
+

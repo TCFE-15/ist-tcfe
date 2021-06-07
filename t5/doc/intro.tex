@@ -1,0 +1,24 @@
+\newpage
+\section{Introduction}
+\label{sec:introduction}
+
+For this laboratory assignment, our objective was to implement a Bandpass Filter, using an Operational Amplifier (OPAMP). In this report, the Filter, that should have a central frequency of 1 kHz and a 40dB gain at the central frequency, will be analysed in a theoretical approach as well as using software simulation. Firstly, is it important to mention that our object of analysis involves three different stages: a high pass stage, in which the signals with high frequencies pass through and the ones with low ones are cut off, an amplification stage,  where, using OPAMP, the signals are amplified, and, finally, a low pass stage, where the amplified signals from the previous stages, are allowed to pass if they're low or are cut if those frequencies are high ones. 
+
+Also, as we will present further through this report and as we did in previous lab assignments, a merit classification system was created to determine and ensure the quality of the Bandpass Filter. This system took into consideration the costs of the components used, which were given to us, the gain deviation and the central frequency deviation. 
+
+In this report, it will be presented a theoretical analysis, in section \ref{sec:analysis}, where the circuit is studied using suitable theoretical models learned in class, in order to predict the gain, phase and the input and output impedances at the central frequency, as well as the frequency response (gain and phase) for a logarithmic range of frequencies. These results are compared with the experimental ones retrieved from the presential laboratory class. Then, we proceeded to a software simulation analysis, in the section \ref{sec:simulation}, made by computational simulation tools, via \textit{Ngspice}, where the OPAMP model that was provided by the professor was used: $\mu A$741 OPAMP.  To sum up the report, the conclusions of this study are presented in Section \ref{sec:conclusion}, where the simulation results obtained in Section \ref{sec:simulation} are compared to the theoretical results obtained in Section \ref{sec:analysis}.
+In Figure \ref{fig:circuit}, the stated circuit is presented and, this time, as we had the chance to physically attend a laboratory session, we also decided to include an image, taken by an element of the group, of the final circuit achieved, that can be seen in figure \ref{fig:circuit.photo}.
+
+
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{t5Circuit}
+	\caption{Circuit that will be analysed in this lab.}
+	\label{fig:circuit}
+\end{figure}
+
+\begin{figure}[h] \centering
+	\includegraphics[width=0.7\linewidth]{im2_circuit}
+	\caption{Montage of the Bandpass Filter circuit on the supplied breadboard.}
+	\label{fig:circuit.photo}
+\end{figure}
+

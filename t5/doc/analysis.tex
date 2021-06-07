@@ -1,0 +1,284 @@
+\section{Theoretical Analysis}
+\label{sec:analysis}
+
+In this section, we shall proceed to the analysis of the circuit presented in Figure \ref{fig:circuit}, using the knowledge learned in the theoretical lectures. This circuit was based in the model provided by the Professor in the presential laboratory class. To accomplish that, we are going to compute the Voltage Gain and the Input and Output Impedances of the circuit, as well as its frequency response, in terms of the Voltage Gain and the Phase of the Output Voltage. As the Voltage Gain and the Input and Output Impedances are incremental parameters, we will need to resort on  Incremental Analysis to make our calculations in this section.
+
+\subsection{Circuit Design} \label{sec:circuitDesign}
+
+Before starting our calculations, it is important to explain how the values relative to each component in the circuit were chosen. As the Professor explained in the presential laboratory class, the Lower and Higher Cut-Off Frequencies, according to the Time Constants Method, are, respectively, given by:
+
+\begin{equation}
+	\omega_L = \frac{1}{R_1 C_1}
+	\label{eq:omegaL}
+\end{equation}
+
+\begin{equation}
+	\omega_H = \frac{1}{R_2 C_2}
+	\label{eq:omegaH}
+\end{equation}
+
+Besides, the Central Frequency for our circuit is given by the geometric average of $\omega_L$ and $\omega_H$:
+\begin{equation}
+	\omega_0 = \sqrt{\omega_L \omega_H}
+	\label{eq:omega0}
+\end{equation}
+
+From this last relation, we can compute $\omega_H$ as a function of $\omega_L$ and $\omega_0$:
+\begin{equation}
+	\omega_H = \frac{\omega_0^2}{\omega_L}
+	\label{eq:omegaHAlt}
+\end{equation}
+
+With this in mind, we chose to fix the values for each capacitor and for the resistor $R_1$:
+\begin{itemize}
+	\item $C_1$ = $C_2$ = 220 nF;
+	\item $R_1$ = 1 k$\Omega$.
+\end{itemize}	
+
+We remember that, in the laboratory, we only had 1 k$\Omega$, 10 k$\Omega$ and 100 k$\Omega$ resistors and 220 nF and 1 $\mu$F capacitors available.
+
+Consequently, the Lower Cut-Off (Radian) Frequency is determined by:
+\begin{equation}
+	\omega_L = \frac{1}{R_1 C_1} = \frac{1}{1000 \cdot 220 \cdot 10^{-9}} = \frac{50000}{11} \approx 4545.45 \;rad/s
+	\label{eq:omegaLVal}
+\end{equation}
+
+Attending to the fact that the Central Frequency was defined as $f_0$ = 1 kHz, we are able to compute $\omega_0$:
+\begin{equation}
+	\omega_0 = 2 \pi f_0 = 2000 \pi \;rad/s
+	\label{eq:omega0Val}
+\end{equation}
+
+We can, now, calculate $\omega_H$, using Equation \ref{eq:omegaHAlt}:
+\begin{equation}
+	\omega_H = \frac{\omega_0^2}{\omega_L} = \frac{(2000 \pi)^2}{\frac{50000}{11}} \approx 8685.251873 \;rad/s
+	\label{eq:omegaHVal}
+\end{equation}
+
+Finally, we extract $R_2$ from Equation \ref{eq:omegaH}:
+\begin{equation}
+	R_2 = \frac{1}{C_2 \omega_H} = \frac{1}{220 \cdot 10^{-9} \cdot 8685.251873} \approx 523.35 \Omega
+	\label{eq:R2Val}
+\end{equation}
+
+As it was said before, there are no resistors in the laboratory with this value. However, we chose to replace $R_2$ with a parallel of two 1 k$\Omega$ resistors, because its equivalent resistance is of 500 $\Omega$, a value that is quite close to the one we obtained in Equation \ref{eq:R2Val} (we remember that the equivalent resistance of a parallel of two equal resistors is half of each resistor's resistance).
+
+For the resistor $R_3$, we decided to keep the resistance of 100 k$\Omega$, as it was suggested by the Professor. However, during the laboratory class, we noticed that the suggested value of 1 k$\Omega$ for $R_4$ was insufficient to achieve a Voltage Gain of 40 dB, which consisted in one of the requirements for this experiment. The solution for this problem was reducing the resistance $R_4$, by applying, once more, a parallel of two 1 k$\Omega$ resistors, whose equivalent resistance is 500 $\Omega$, as it was already explained. With $R_4$ = 500 $\Omega$, we measured, in the laboratory class, a Voltage Gain even higher than 40 dB, which satisfies the mentioned requirement.
+
+\subsection{Voltage Gain and Phase}		\label{sec:gainPhase}
+
+In this subsection, we shall determine the Voltage Gain of the Bandpass Filter circuit.
+We start by observing that the middle section of the circuit, which includes the Operational Amplifier (OPAMP) and the resistors $R_3$ and $R_4$, consists on a Non-Inverting Amplifier configuration, in all similar to the one studied in the theoretical classes. Considering $v_+$ as the voltage at the positive input of the OPAMP and $v_-$ as the voltage at its negative input, the voltage at the output of the OPAMP is given by:
+
+\begin{equation}
+	v_{o(OPAMP)} = A_v (v_+ - v_-)
+	\label{eq:voOPAMP1}
+\end{equation} 
+, where $A_v$ is the Feed-Forward Gain. Ideally, $A_v$ tends to be infinite, which means that, in order to have a finite value of $v_{o(OPAMP)}$, $(v_+ - v_-)$ must be zero, that is, $v_+ = v_- = v_{i(OPAMP)}$.
+The voltage $v_{o(OPAMP)}$ can also be calculated through the following relation:
+\begin{equation}
+	v_{o(OPAMP)} = v_- + R_3 i_F = v_{i(OPAMP)} + R_3 i_{i(OPAMP)}
+	\label{eq:voOPAMP2}
+\end{equation}
+
+, where the current, $i_F$, flowing through resistors $R_3$ and $R_4$ is computed as:
+\begin{equation}
+	i_F = \frac{v_-}{R_4}
+	\label{eq:vMinus}
+\end{equation}
+
+Therefore, the Voltage Gain at the output of the OPAMP is:
+\begin{equation}
+	\frac{v_o}{v_i} = 1 + \frac{R_3}{R_4}
+	\label{eq:gainOPAMP}
+\end{equation}
+
+This would be the Voltage Gain of the circuit if we had not added the resistors $R_1$ and $R_2$, along with the capacitors $C_1$ and $C_2$. These components are responsible for the intended Bandpass Filter behaviour of the circuit. 
+
+The resistor $R_1$ and the capacitor $C_{1}$ contribute to the Voltage Gain with the following factor to the Transfer Function, derived from the Voltage Divider law ($s=j\omega$):
+\begin{equation}
+	H(s)=\frac{R_1}{R_1+\frac{1}{j\omega C_1}}=\frac{R_1}{\frac{R_1 C_1j\omega +1}{j\omega C_1}} = \frac{R_1 C_1 s}{1 + R_1 C_1 s} 
+	\label{eq:hs}
+\end{equation}
+
+We can verify that this contribution corresponds to a High-Pass Filter, as, for low frequencies (close to 0), this factor tends to 0, and, for high frequencies (tending to infinity), this ratio tends to 1, which means this part of the circuit lets pass only the higher frequencies, cutting the low ones.
+
+On the other hand, the resistor $R_2$ and the capacitor $C_2$ affect the Transfer Function by considering the following factor, deduced using once more the Voltage Divider law:
+
+\begin{equation}
+	L(s)=\frac{\frac{1}{j\omega C_2}}{R_2+\frac{1}{j \omega C_2}}= \frac{\frac{1}{j\omega C_2}}{\frac{R_2 C_2j\omega + 1}{j\omega C_2}} = \frac{1}{1 + R_2 C_2 s} 
+	\label{eq:ls}
+\end{equation}
+
+We can also take the conclusion that this part of the circuit consists on a Low-Pass Filter configuration, as, for low frequencies, this ratio tends to 1, and, for higher frequencies, it tends to 0, which means this section of the circuit lets pass only the low frequencies, cutting the high ones.  
+
+Adding these contributions to the one from the Voltage Gain of the Non-Inverting Amplifier section (middle section), we obtain the following Transfer Function, T(s), with $s = j\omega$ and $\omega$ being the radian frequency in study: 
+
+\begin{equation}
+	T(s) = \frac{R_1 C_1 s}{1 + R_1 C_1 s} \cdot \left(1 + \frac{R_3}{R_4}\right) \cdot \frac{1}{1 + R_2 C_2 s}
+	\label{eq:transferFunction}
+\end{equation}
+
+From this, we understood that, by decreasing resistance $R_4$, we would increase the Voltage Gain, thus solving the problem described at the end of Subsection \ref{sec:circuitDesign}.
+
+Finally, the Voltage Gain of the circuit is just the absolute value of T(s):
+
+\begin{equation}
+	\frac{v_o}{v_i} = |T(s)|
+	\label{eq:gainTotal}
+\end{equation}
+
+Hence, the Voltage Gain for the Central Frequency of 1 kHz corresponds to $\omega$ = $2\pi f_0$ = $2000\pi$ rad/s:
+\begin{equation}
+	\frac{v_o}{v_i}(f_0 = 1000 Hz) = 133.97 = 42.540\;dB
+	\label{eq:gainTotalVal}
+\end{equation}
+
+The Voltage Phase relative to $f_0$ = 1000 Hz is the angle of T(s) when s = $2000\pi\cdot j$:
+\begin{equation}
+	Phase = arctan \left(\frac{Im(T(j\omega_0))}{Re(T(j\omega_0))} \right) = 1.2329^o
+	\label{eq:phaseTheoretical}
+\end{equation}
+
+\subsection{Input and Output Impedances}	\label{sec:inOutImpedances}
+
+In this subsection, we intend to determine the Input and Output Impedances of the circuit.
+
+Starting by the Input Impedance, we note that, by shutting down the independent sources in the circuit, the equivalent impedance as seen by the input source corresponds to the series of the resistor $R_1$ and the capacitor $C_1$. Therefore, the Input Impedance of the Bandpass Filter circuit is given by:
+
+\begin{equation}
+	Z_{in} = R_1 + Z_{C_1} = R_1 + \frac{1}{j\omega C_1}
+	\label{eq:inputImpedance}
+\end{equation} 
+
+For the Central Frequency, $\omega_0$ = $2000\pi$ rad/s; hence, the Input Impedance for the Central Frequency is:
+
+\begin{equation}
+	Z_{in}(\omega_0) = R_1 + \frac{1}{j\cdot 2000\pi \cdot C_1} = 1000.00 -  723.43j [\Omega]
+	\label{eq:inputImpVal}
+\end{equation}
+
+, whose absolute value is 1234.2 $\Omega$.
+
+Now, we proceed to calculate the Output Impedance of the circuit. We observe that the equivalent impedance, as seen from the output, is, approximately, the parallel of the resistor $R_2$ and the capacitor $C_2$ (for medium frequencies). The resistances $R_3$ and $R_4$ are neglectable because they are in parallel with the Output Impedance of the OPAMP, which is approximately null (short-circuit).
+
+Then, the Output Impedance of the Bandpass Filter circuit is determined as: 
+
+\begin{equation}
+	Z_{out} = R_2 || C_2 = \frac{1}{\frac{1}{R_2} + j\omega C_2}
+	\label{eq:outputImpedance}
+\end{equation}
+
+
+
+Therefore, the Output Impedance for the Central Frequency is:
+
+\begin{equation}
+	Z_{out} = R_2 || C_2 = \frac{1}{\frac{1}{R_2} + j \cdot 2000\pi C_2} = 338.37 - 233.86j 
+	\label{eq:outputImpVal}
+\end{equation}
+
+Its absolute value is 411.32 $\Omega$.
+
+
+\subsection{Frequency Response}		\label{sec:freqResponse}
+
+In this subsection, we will study how the behaviour of the circuit varies with the source frequency, $f$, in particular how the Voltage Gain and Phase are affected by it. Therefore, we are going to solve the circuit for a frequency vector in logarithmic scale with 10 points per decade, from 10 Hz to 100 MHz, applying the equations \ref{eq:transferFunction}, \ref{eq:gainTotal} and \ref{eq:phaseTheoretical}, referred in Subsection \ref{sec:gainPhase}. This procedure allows us to plot the Voltage Gain and Phase in function of the source frequency, as presented in Figures \ref{fig:Gain} and \ref{fig:Phase}.
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{Tdb}
+	\caption{Voltage Gain [dB] vs Source Frequency [Hz]}
+	\label{fig:Gain}
+\end{figure}
+\FloatBarrier
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{Tp}
+	\caption{Voltage Phase [$^o$] vs Source Frequency [Hz]}
+	\label{fig:Phase}
+\end{figure}
+\FloatBarrier
+
+In theory, the Voltage Gain would be stable in a passband around the Central Frequency $f_0$ = 1 kHz. We can limit this passband reasonably by computing the Lower and Higher Cut-Off Frequencies from their respective radian frequencies. As the radian frequency is given by:
+
+\begin{equation}
+	\omega = 2\pi f
+	\label{eq:radFreqCalc}
+\end{equation} 
+
+, the Lower and Higher Cut-Off Frequencies ($f_L$ and $f_H$, respectively) are simply given by:
+
+\begin{equation}
+	f_L = \frac{\omega_L}{2\pi} \approx 723.43 Hz
+	\label{eq:lowerFreq}
+\end{equation}
+
+\begin{equation}
+	f_H = \frac{\omega_H}{2\pi} \approx 1382.30 Hz
+	\label{eq:higherFreq}
+\end{equation}
+
+By inspection of Figure \ref{fig:Gain}, we verify that the Voltage Gain between these two frequencies is very close to 40 dB, as intended. 
+
+Focusing now on the Voltage Phase, the plot starts at 90 degrees, as the Transfer Function has a zero at the origin (we note that the numerator of T(s) is a linear function of s). Then, the plot has a slope of 90 degrees per decade, as the Transfer Function has two poles (we add that the denominator of T(s) has a quadratic dependence on s). After that, the Voltage Phase tends to -90 degrees, in the region of the higher frequencies.
+
+
+\section{Experimental Analysis}		\label{sec:experimental}
+
+This section is dedicated to the analysis of the experimental results, measured in the presential laboratory class.
+The montage of the Bandpass Filter implemented in the presential laboratory class has already been presented in Figure \ref{fig:circuit.photo}.
+
+Now, we are computing the Voltage Gain, but using the experimental values.
+For the Central Frequency of 1 kHz, the amplitude of the Output Voltage signal was $v_o = 13.5 V$, as presented in Figure \ref{fig:exp1kHz}. 
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{im3_1khz}
+	\caption{Experimental Results for $f$ = 1 kHz}
+	\label{fig:exp1kHz}
+\end{figure}
+\FloatBarrier
+
+
+
+As the Input Voltage amplitude was $v_i = 0.111 V$, the Voltage Gain is determined from:
+
+\begin{equation}
+	\frac{v_o}{v_i}(f = 1000 Hz) = \frac{13.5}{0.111} = 121.62 = 41.700\;dB
+	\label{eq:gainCentralExp}
+\end{equation} 
+, which is a higher value than the requested 40 dB, and rather close to the theoretical value: 42.540 dB. As we will explain further, this small difference can be explained, among other factors, by the fact that each resistor or capacitor has an associated tolerance, along with the possibility of the wires having a non-neglectable resistance.   
+
+In order to verify that the circuit is in the Cut-Off Region for low and high frequencies, we also measured the amplitude of the Output Voltage for $f$ = 100 Hz and $f$ = 10000 Hz. The results are presented in Figures \ref{fig:exp100Hz} and \ref{fig:exp10000Hz}.
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{im4_100hz}
+	\caption{Experimental Results for $f$ = 100 Hz}
+	\label{fig:exp100Hz}
+\end{figure}
+\FloatBarrier
+
+\FloatBarrier
+\begin{figure}[h] \centering
+	\includegraphics[width=0.8\linewidth]{im5_10kHz}
+	\caption{Experimental Results for $f$ = 10000 Hz}
+	\label{fig:exp10000Hz}
+\end{figure}
+\FloatBarrier
+
+The Voltage Gain values for this frequencies are:
+
+\begin{equation}
+	\frac{v_o}{v_i}(f = 100 Hz) = \frac{3.4}{0.115} = 29.565 = 29.416\;dB
+	\label{eq:gain100Exp}
+\end{equation} 
+
+\begin{equation}
+	\frac{v_o}{v_i}(f = 10000 Hz) = \frac{0.860}{0.113} = 7.6106 = 17.628\;dB
+	\label{eq:gain10000Exp}
+\end{equation} 
+
+As the Voltage Gain values obtained for this frequencies are way lower than $(40 - 3) = 37$ dB, we conclude that this frequencies belong, indeed, to the Cut-Off Region. 
